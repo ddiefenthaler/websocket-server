@@ -1,3 +1,5 @@
+## Abstract
+
 The WebSocket protocol allows browsers and other clients to communicate with
 a server in a similar fashion like normal network sockets.
 It operates on layer 7 of the OSI model.

@@ -1,19 +1,24 @@
 ## Thread Structure
 
+
+### First approach
+
 - todo appropiate term for package -
 
 The program consists of four different type of threads.
 The number of threads per type varies depending on in which mode it is running. - todo ref earlier section
 The following table lists the threads per mode.
 
-|  Server mode | Client mode |
-| ------------ | ----------- |
-| 1× select    |             |
-| 2× receive   | 1× receive  |
-| 4× handle    | 1× handle   |
-| 1× observer  | 1× observer |
+| Server mode | Client mode |
+| ----------- | ----------- |
+| 1× select   |             |
+| 2× receive  | 1× receive  |
+| 4× handle   | 1× handle   |
+| 1× observer | 1× observer |
 
-The communication between the threads happens through priority pools/queues.
+- todo system overview with thread types marked in it -
+
+The communication between the threads happens through simple queues.
 
 Select checks for incoming packages on the open sockets.
 This is done using the system call select - todo ref mangpage.
@@ -39,3 +44,18 @@ A possibility is that relaunching the programm from the command line with extra 
 This would enable use cases like this: `./creative-program-name broadcast Hello world!`
 
 Even though for a client one thread could be enough this structure will stay mostly in place to allow the quicker handling of control frames.
+
+
+### Further considerations
+
+After a conversation with the advisor of this practicum ...
+comparison task based models
+
+
+### Final thread model
+
+
+### Excursion: Pritrity queue
+
+
+
