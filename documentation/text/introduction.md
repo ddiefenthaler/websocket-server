@@ -23,6 +23,7 @@ Through this two way communication is possible triggered by any of server or cli
 The WebSocket protocol is specified in [RFC 6455](https://tools.ietf.org/html/rfc6455).
 In the OSI model it operates on the layers 5 through 7 as an application.
 This classification is a litte bit odd as the protocol provides it own fragmentation mechanics.
+For further information see [1.5. Design Philosophy](https://tools.ietf.org/html/rfc6455#section-1.5) in the referenced RFC.
 
 The clients of a WebSocket connection are usually browsers.
 As such web pages should be available in all larger browsers
