@@ -1,5 +1,7 @@
 ## Thread Structure
 
+The folowing section describes the development process.
+Each subsection complies to one step in this procedure.
 
 ### First approach
 
@@ -55,7 +57,7 @@ comparison task based models
 ### Final thread model
 
 
-### Excursion: Pritrity queue
+### Excursion: Priority queue
 
 
 
