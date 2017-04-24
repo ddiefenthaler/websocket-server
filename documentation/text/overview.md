@@ -46,5 +46,16 @@ this feature comes with no extra cost.
 
 ### Usage
 
-command line examples
+When first started it initialises the daemon that is listening on the connections.
+It reads the static configurtion from a configuration file or the command line.
+Parameters that can be set this way are for example the port to listen on or the server name.
+
+Further configuration can be done by recalling the program.
+Parameters given this time get passed to the daemon.
+With this it is possible to manage connection or broadcast messages.
+It can also be called from server side scripts like PHP or perl.
+This way the server should be very flexible.
+
+- todo list of possible commands -
+
 
