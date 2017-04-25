@@ -15,7 +15,7 @@ use it without exactly knowing how WebSockets work,
 - and the scheduling and load balancing for proper
 handling of multiple connections at once.
 
-![Use cases](../pcitures/usecases.svg)
+![Use cases](../pictures/usecases.svg)
 
 Use cases for such a server are for example web pages with a chat component or games.
 Another use case would be push notifications inside a web site.
