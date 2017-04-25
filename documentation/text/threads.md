@@ -82,8 +82,9 @@ between `select` and `libevent` really is.
 In both cases it will run in a seperate thread.
 
 The _observer_ will also just stay a seperate thread.
-However as this 
+It will periodically check for jobs it has to do and will sleep otherwise.
 
-Since the seperate threads just enque further tasks and are blocking otherwise
-they do not get into the way of the worker threads.
+Since the seperate threads just enque further tasks and are blocked otherwise
+they only put very little load onto the system.
+Therefore the should not get into the way of the worker threads.
 
