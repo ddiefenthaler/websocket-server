@@ -16,7 +16,7 @@ The following table lists the planned threads per task.
 | 4× handle   | 1× handle   |
 | 1× observer | 1× observer |
 
-![Placement of task in system overview](../pictures/task.svg)
+![Placement of task in system overview](../pictures/tasks.svg)
 
 The communication between the threads happens through simple queues.
 
