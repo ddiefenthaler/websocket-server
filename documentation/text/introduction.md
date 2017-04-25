@@ -1,6 +1,6 @@
 ## Introduction
 
-A large protion of the modern web pages are dynamic.
+A large portion of the modern web pages are dynamic.
 To accomplish this JavaScript is used to update the page.
 Sometimes whole pages display completely dynamic content.
 Very often this updates to this content depend on external factors.
@@ -38,11 +38,10 @@ a different port and the opening handshake looks like a HTTP request.
 A server that does not support WebSockets can correctly answer such a request
 with an apporpriate HTTP status code.
 
-The goal of this practicum is to create an explicit WebSocket server.
+The goal of this practical course is to create an explicit WebSocket server.
 This allows specific optimazation for this use case.
 Nevertheless it is kept in mind that this project should be easily usabl
 along with classic HTTP servers like apache and nginx.
 Therefore this program should provide an command line interface
 which allows easy and full control from server side scripts.
-
 

@@ -58,4 +58,3 @@ This way the server should be very flexible.
 
 - todo list of possible commands -
 
-
