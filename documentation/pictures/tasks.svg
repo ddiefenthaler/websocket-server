@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg width="650" height="550" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrHead" viewBox="0 0 12 12" refX="10" refY="6"
+        markerWidth="12" markerHeight="12" orient="auto">
+      <path d="M1 1 L11 6 L1 11" stroke="black" fill="none" />
+    </marker>
+  </defs>
+  
+  <rect x="0" y="0" width="650" height="550" stroke="none" fill="white" />
+
+  <rect x="150" y="50" width="450" height="450" stroke="black" fill="none" />
+  <text x="165" y="75">Server</text>
+  
+  <rect x="200" y="100" width="90" height="120" stroke="black" fill="none" />
+  <text x="208" y="120">HTTP
+  <tspan x="208" y="140">Interface</tspan>
+  </text>
+  
+  <line x1="10" y1="130" x2="195" y2="130" stroke="black" marker-end="url(#arrHead)" />
+  <line x1="195" y1="155" x2="10" y2="155" stroke="black" marker-end="url(#arrHead)" />
+  <text x="65" y="148">HTTP
+  <tspan x="6" y="175">(WebSocket</tspan>
+  <tspan x="12" y="195">Opening Handshake)</tspan>
+  </text>
+  
+  <rect x="335" y="100" width="237" height="105" stroke="black" fill="white" />
+  <text x="343" y="195">Connection Management</text>
+  <line x1="295" y1="130" x2="346" y2="130" stroke="black" marker-end="url(#arrHead)" />
+  <line x1="346" y1="155" x2="295" y2="155" stroke="black" marker-end="url(#arrHead)" />
+  
+  <rect x="351" y="115" width="84" height="55" stroke="black" fill="none" />
+  <text x="359" y="135">Dispatcher</text>
+  <line x1="440" y1="130" x2="460" y2="130" stroke="black" marker-end="url(#arrHead)" />
+  <line x1="460" y1="155" x2="440" y2="155" stroke="black" marker-end="url(#arrHead)" />
+  
+  <ellipse cx="393" cy="142.5" rx="58" ry="47" stroke="red" fill="none" />
+  <text x="363" y="90" fill="red">observer</text>
+  
+  <path d="M465 125 h10 v-10 l-10 10 v45 h90 v-55 h-80" stroke="black" fill="none" />
+  <text x="473" y="140">Connection
+  <tspan x="483" y="160">Pool</tspan>
+  </text>
+  
+  <rect x="200" y="300" width="90" height="120" stroke="black" fill="none" />
+  <text x="208" y="320">WebSocket
+  <tspan x="208" y="340">Interface</tspan>
+  </text>
+  
+  <ellipse cx="245" cy="260" rx="70" ry="200" stroke="red" fill="none" />
+  <text x="220" y="475" fill="red">receive</text>
+  
+  <line x1="10" y1="330" x2="195" y2="330" stroke="black" marker-end="url(#arrHead)" />
+  <line x1="195" y1="355" x2="10" y2="355" stroke="black" marker-end="url(#arrHead)" />
+  <text x="65" y="348">WebSocket</text>
+  
+  <ellipse cx="150" cy="242.5" rx="15" ry="125" stroke="red" fill="none" />
+  <text x="132" y="382" fill="red">select/
+  <tspan x="132" y="402">libevent</tspan>
+  </text>
+  
+  
+  <rect x="325" y="248" width="230" height="207" stroke="black" fill="none" />
+  <text x="333" y="445">WebSocket Frame Processing</text>
+  <line x1="295" y1="330" x2="345" y2="330" stroke="black" marker-end="url(#arrHead)" />
+  <line x1="345" y1="355" x2="295" y2="355" stroke="black" marker-end="url(#arrHead)" />
+  <rect x="-10" y="-10" width="20" height="20" stroke="black" fill="none" transform="translate(360 342.5) rotate(45) skewX(10) skewY(10)" />
+  
+  <rect x="410" y="268" width="100" height="65" stroke="black" fill="none" />
+  <text x="418" y="288">Message
+  <tspan x="418" y="308">Queue</tspan>
+  </text>
+  <line x1="310" y1="335" x2="345" y2="335" stroke="black" marker-end="url(#arrHead)" transform="rotate(140 360 342.5)" />
+  <line x1="345" y1="355" x2="310" y2="355" stroke="black" marker-end="url(#arrHead)" transform="rotate(140 360 342.5)" />
+  
+  <rect x="410" y="353" width="100" height="65" stroke="black" fill="none" />
+  <text x="418" y="373">Signal
+  <tspan x="418" y="393">Processing</tspan>
+  <tspan x="418" y="410" font-size="11">(Control Frames)</tspan>
+  </text>
+  <line x1="310" y1="330" x2="345" y2="330" stroke="black" marker-end="url(#arrHead)" transform="rotate(220 360 342.5)" />
+  <line x1="345" y1="350" x2="310" y2="350" stroke="black" marker-end="url(#arrHead)" transform="rotate(220 360 342.5)" />
+  
+  <ellipse cx="460" cy="343" rx="70" ry="102" stroke="red" fill="none" />
+  <text x="440" y="237" fill="red">handle</text>
+  
+  <line x1="530" y1="375" x2="515" y2="375" stroke="black" marker-end="url(#arrHead)" />
+  <line x1="530" y1="375" x2="530" y2="210" stroke="black" marker-end="url(#arrHead)" />
+  
+</svg>

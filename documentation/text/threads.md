@@ -21,7 +21,7 @@ The following table lists the planned threads per task.
 The communication between the threads happens through simple queues.
 
 Select checks for incoming messages on the open connections.
-This can be done using the system call select - todo ref mangpage.
+This can be done using the system call select.
 Another possibility would be the use of libevent.
 All channels with incoming communication get written into a queue to be read by the receive threads.
 For a client this task is not really needed. For simplicity it may stay nevertheless.
@@ -29,7 +29,6 @@ For a client this task is not really needed. For simplicity it may stay neverthe
 The receive task reads the data from the channel.
 Before putting it into the next queue it also decodes the messages (See [5.3. Client-to-Server Masking](https://tools.ietf.org/html/rfc6455#section-5.3)).
 As messages may be larger move sematics are used to prevent them to get copied over and over again.
-- todo fragmentation -
 
 Handle tasks take messages from the queue and process them.
 How this happens is described in more detail in the next section.
@@ -41,7 +40,7 @@ For example a ping request should not take to long as the client otherwise assum
 
 The observer is a control thread that can read from stdin or tempfiles to trigger actions.
 It should also be able to trigger ping request on its own if requested.
-For examples what the observer should cause see the previous passage Usage. - todo ref
+For examples what the observer should cause see the previous passage Usage.
 
 If this program runs in client mode only one thread is actually needed.
 But the tasks stay valid anyway, so for simplicity the structure is kept.
@@ -74,6 +73,7 @@ But only _receive_ and _handle_ are processed as tasks.
 Regaring this little number only one queue for all worker threads is used.
 This is supject to change if it does not scale well
 however this is over the scope of this practical course.
+Internally the queue consists of multiple containers to allow differnt priorities.
 
 Instead of plain _select_ the library libevent is used.
 As this is directly feeded into the task queue the difference should nor be large.

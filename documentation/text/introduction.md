@@ -40,7 +40,7 @@ with an apporpriate HTTP status code.
 
 The goal of this practical course is to create an explicit WebSocket server.
 This allows specific optimazation for this use case.
-Nevertheless it is kept in mind that this project should be easily usabl
+Nevertheless it is kept in mind that this project should be easily usable
 along with classic HTTP servers like apache and nginx.
 Therefore this program should provide an command line interface
 which allows easy and full control from server side scripts.

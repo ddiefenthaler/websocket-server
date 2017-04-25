@@ -12,7 +12,7 @@ If they differ in functionality in client mode this is listed here as well.
   To support a client mode this also has to understand both halfs of the handshake.
 - **Dispatcher**: This module is actually hard to see in the code.
   It is mostly hidden in the member functions of the Connection Pool and taks queues.
-  - todo observer task -
+  The observer task described in the next section is also part of this module.
 - **Connection Pool**: This is a container that lists the connections known by the server.
   It provides different member functions that allow various things.
   For example they can give access to messages received by the connection.
@@ -56,5 +56,7 @@ With this it is possible to manage connection or broadcast messages.
 It can also be called from server side scripts like PHP or perl.
 This way the server should be very flexible.
 
-- todo list of possible commands -
+Communication with the main daemon takes place through tempfiles.
+They get parsed in a similar way to incoming messages of the clients.
+This means if new commands should be added they get added like reations to client messages.
 
