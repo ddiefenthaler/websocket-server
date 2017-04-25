@@ -1,10 +1,12 @@
 
-MDFILES = abstract.md introduction.md overview.md threads.md handle.md
+MDFILES = abstract.md introduction.md overview.md threads.md handle.md outlook.md
 
 .PHONY: doc
 
-doc: doc.md
+doc: result/doc.md
 
-doc.md: $(MDFILES:%=text/%)
-	cat $+ > doc.md
+result/doc.md: $(MDFILES:%=text/%)
+  -mkdir result
+  -mv result/doc.md result/doc.md.bak
+	cat $+ > result/doc.md
 
