@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg width="600" height="250" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrHead" viewBox="0 0 12 12" refX="10" refY="6"
+        markerWidth="12" markerHeight="12" orient="auto">
+      <path d="M1 1 L11 6 L1 11" stroke="black" fill="none" />
+    </marker>
+    <marker id="arrFoot" viewBox="0 0 12 12" refX="2" refY="6"
+        markerWidth="12" markerHeight="12" orient="auto">
+      <path d="M11 11 L1 6 L11 1" stroke="black" fill="none" />
+    </marker>
+    <marker id="arrHeadSmall" viewBox="0 0 6 6" refX="5" refY="3"
+        markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0.5 0.5 L5.5 3 L0.5 5.5" stroke="black" fill="none" />
+    </marker>
+    <marker id="arrFootSmall" viewBox="0 0 6 6" refX="1" refY="3"
+        markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M5.5 5.5 L0.5 3 L5.5 0.5" stroke="black" fill="none" />
+    </marker>
+  </defs>
+  
+  <rect x="0" y="0" width="600" height="250" stroke="none" fill="white" />
+
+  <rect x="200" y="50" width="200" height="150" stroke="black" fill="none" />
+  <text x="215" y="75">Server</text>
+  
+  <line x1="100" y1="70" x2="195" y2="70" stroke="black" marker-start="url(#arrFoot)" marker-end="url(#arrHead)" />
+  <text x="35"  y="75">Client A</text>
+  <line x1="65" y1="80" x2="65" y2="115" stroke="black" stroke-dasharray="7, 7" marker-start="url(#arrFootSmall)" marker-end="url(#arrHeadSmall)" />
+  <line x1="100" y1="125" x2="195" y2="125" stroke="black" marker-start="url(#arrFoot)" marker-end="url(#arrHead)" />
+  <text x="35" y="130">Client B</text>
+  <line x1="65" y1="135" x2="65" y2="170" stroke="black" stroke-dasharray="7, 7" marker-start="url(#arrFootSmall)" marker-end="url(#arrHeadSmall)" />
+  <line x1="100" y1="180" x2="195" y2="180" stroke="black" marker-start="url(#arrFoot)" marker-end="url(#arrHead)" />
+  <text x="35" y="185">Client C</text>
+  
+  <line x1="500" y1="70" x2="405" y2="70" stroke="black" marker-start="url(#arrFoot)" marker-end="url(#arrHead)" />
+  <text x="510"  y="75">Client D</text>
+  <line x1="390" y1="97.5" x2="590" y2="97.5" stroke="black" stroke-dasharray="5, 10" />
+  <line x1="500" y1="125" x2="405" y2="125" stroke="black" marker-start="url(#arrFoot)" marker-end="url(#arrHead)" />
+  <text x="510" y="130">Client E</text>
+  <line x1="390" y1="152.5" x2="590" y2="152.5" stroke="black" stroke-dasharray="5, 10" />
+  <line x1="500" y1="180" x2="405" y2="180" stroke="black" marker-start="url(#arrFoot)" marker-end="url(#arrHead)" />
+  <text x="510" y="185">Client F</text>
+  
+</svg>

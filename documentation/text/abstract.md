@@ -1,3 +1,5 @@
+# WebSocket-Server
+
 ## Abstract
 
 The WebSocket protocol allows browsers and other clients to communicate with
@@ -12,4 +14,12 @@ from the command line or from server side scripts. The two main parts are
 use it without exactly knowing how WebSockets work,
 - and the scheduling and load balancing for proper
 handling of multiple connections at once.
+
+![Use cases](../pcitures/usecases.svg)
+
+Use cases for such a server are for example web pages with a chat component or games.
+Another use case would be push notifications inside a web site.
+These are two different categories of clients.
+- In one case they can communicate between each other.
+- In the other they are completely unaware of each other.
 
