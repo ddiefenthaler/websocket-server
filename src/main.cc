@@ -28,7 +28,7 @@ int main(int argc, char * argv[]) {
   
   struct event_base * base;
   
-  std::pair<std::map<int, Connection> *, struct event_base *> callback_args = std::make_pair(&connections, base);
+  std::pair<std::map<int, websocket::Connection> *, struct event_base *> callback_args = std::make_pair(&connections, base);
   
   evutil_socket_t sockfd = websocket::create_listen_socket(config);
   
