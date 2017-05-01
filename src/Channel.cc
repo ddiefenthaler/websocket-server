@@ -8,6 +8,8 @@ namespace websocket {
 
 class Channel {
   
+  public:
+  
   Channel()
   : _sockfd(-1), _bev(nullptr)
   {}

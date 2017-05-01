@@ -8,6 +8,8 @@ namespace websocket {
 
 class Channel {
   
+  public:
+  
   Channel();
   
   Channel(int sockfd, struct event_base & base);
@@ -31,6 +33,6 @@ class Channel {
     struct bufferevent * _bev;
 };
 
-#endif
-
 } // websocket
+
+#endif
