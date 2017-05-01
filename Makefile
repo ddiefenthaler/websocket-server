@@ -1,14 +1,25 @@
 
-CXXFLAGS = -c -Wall -I ./include/
+CXXFLAGS = -c -g -Wall -I ./include/
 
-LDFLAGS = -lpthread -levent
+LDFLAGS = -lpthread -levent -levent_pthreads
 
+HFILES = Config.h network.h Connection.h Channel.h
 CXXFILES = main.cc Config.cc network.cc Connection.cc Channel.cc
 
-.PHONY: all
+.PHONY: all clean rebuild
 
-all: $(CXXFILES:%.cc=build/%.o)
+all: websocket-server
+
+websocket-server: $(CXXFILES:%.cc=build/%.o)
 	g++ -o websocket-server $+ $(LDFLAGS)
 
-build/%.o: src/%.cc
-	g++ -o $@ $(CXXFLAGS) $+
+build/%.o: src/%.cc $(HFILES:%=include/websocket/%) build/trigger_rebuild
+	g++ -o $@ $(CXXFLAGS) $<
+
+clean:
+	rm -rf build/*
+	touch build/trigger_rebuild
+
+rebuild:
+	touch build/trigger_rebuild
+
