@@ -1,18 +1,23 @@
 #ifndef WEBSOCKET_SERVER__CHANNEL
 #define WEBSOCKET_SERVER__CHANNEL
 
+#include <map>
+
 #include <event2/event.h>
 #include <event2/bufferevent.h>
 
+
 namespace websocket {
 
+class Connection;
+
 class Channel {
-  
-  public:
+
+public:
   
   Channel();
   
-  Channel(int sockfd, struct event_base & base);
+  Channel(int sockfd, struct event_base & base, std::map<int, Connection> & connections);
   
   Channel(const Channel &) = delete;
   
@@ -28,7 +33,7 @@ class Channel {
   
   //todo send_to
   
-  private:
+private:
     int                  _sockfd;
     struct bufferevent * _bev;
 };

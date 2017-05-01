@@ -1,7 +1,7 @@
 #include <utility>
 
-#include <websocket/Connection.h>
 #include <websocket/Channel.h>
+#include <websocket/Connection.h>
 //#include <websocket/Message.h>
 
 namespace websocket {
