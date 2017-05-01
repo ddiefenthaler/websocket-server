@@ -11,17 +11,43 @@
 #include <websocket/Config.h>
 #include <websocket/Channel.h>
 #include <websocket/Connection.h>
+#include <websocket/Message.h>
 
 namespace websocket {
 
 void receive_from_channel(struct bufferevent * bev, void * arg) {
   std::map<int, Connection> & connections = *reinterpret_cast<std::map<int, Connection> *>(arg);
-  
+
+  Connection & connection = connections.find(bufferevent_getfd(bev))->second;
+
+  struct evbuffer * input = bufferevent_get_input(bev);
+  if(connection.is_established() || connection.establishing()) {
+
+  } else {
+    struct evbuffer_ptr p;
+    evbuffer_ptr_set(input, &p, 0, EVBUFFER_PTR_SET);
+    p = evbuffer_search(input, "\r\n\r\n", 4, &p);
+    if(p.pos == -1) {
+      bufferevent_setwatermark(bev, EV_READ, evbuffer_get_length(input)+1, 16384);
+    } else {
+      Message msg(OpeningHandshake_Client,p.pos+4);
+
+      evbuffer_remove(input, msg.getPayloadPtr(),p.pos+4);
+
+      // todo enque_incoming
+      // todo enque task
+    }
+  }
+
 }
 
 void error_from_channel(struct bufferevent * bev, short error, void * arg) {
   std::map<int, Connection> & connections = *reinterpret_cast<std::map<int, Connection> *>(arg);
   
+  //if(error & BEV_EVENT_EOF) {
+    connections.erase(connections.find(bufferevent_getfd(bev)));
+  //} else  {
+  //}
 }
 
 void accept_new_connection(evutil_socket_t sockfd, short event, void * arg) {

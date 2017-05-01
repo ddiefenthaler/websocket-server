@@ -1,24 +1,29 @@
 #ifndef WEBSOCKET_SERVER__CONNECTION
 #define WEBSOCKET_SERVER__CONNECTION
 
+#include <deque>
+
 #include <websocket/Channel.h>
-//#include <websocket/Message.h>
+#include <websocket/Message.h>
 
 namespace websocket {
 
 class Connection {
 
-  public:
+public:
 
-    Connection() = default;
-    
-    Connection(Channel && channel);
-    
-  private:
-    bool established = false;
-    Channel _channel;
-//    std::vector<Message> _incoming;
-//    std::vector<Message> _outgoing;
+  Connection() = default;
+
+  Connection(Channel && channel);
+
+  bool is_established() const;
+
+  bool establishing() const;
+
+private:
+  bool _established = false;
+  Channel _channel;
+  std::deque<Message> _incoming;
 };
 
 } // websocket

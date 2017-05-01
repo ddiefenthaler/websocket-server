@@ -10,4 +10,12 @@ Connection::Connection(Channel && channel)
   : _channel(std::move(channel))
   {}
 
+bool Connection::is_established() const {
+  return _established;
+}
+
+bool Connection::establishing() const {
+  return _incoming.size() >= 1;
+}
+
 } // websocket
