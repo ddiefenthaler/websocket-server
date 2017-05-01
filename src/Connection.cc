@@ -7,7 +7,7 @@ namespace websocket {
 
 class Connection {
   
-  Connection() = delete;
+  Connection() = default;
   
   Connection(int sockfd)
   : _channel(sockfd)
