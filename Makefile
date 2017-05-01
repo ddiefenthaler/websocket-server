@@ -1,5 +1,5 @@
 
-CXXFLAGS = -Wall -I ./include
+CXXFLAGS = -Wall -I ./include/
 
 LDFLAGS = 
 

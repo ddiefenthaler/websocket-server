@@ -1,3 +1,5 @@
+#ifndef WEBSOCKET_SERVER__CONNECTION
+#define WEBSOCKET_SERVER__CONNECTION
 
 #include <websocket/Channel.h>
 //#include <websocket/Message.h>
@@ -18,3 +20,5 @@ class Connection {
 };
 
 } // websocket
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef WEBSOCKET_SERVER__CHANNEL
+#define WEBSOCKET_SERVER__CHANNEL
+
 #include <event2/event.h>
 #include <event2/bufferevent.h>
 
@@ -27,5 +30,7 @@ class Channel {
     int                  _sockfd;
     struct * bufferevent _bev;
 };
+
+#endif
 
 } // websocket

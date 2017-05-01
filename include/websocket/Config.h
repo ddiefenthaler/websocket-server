@@ -1,7 +1,9 @@
+#ifndef WEBSOCKET_SERVER__CONFIG
+#define WEBSOCKET_SERVER__CONFIG
 
 namespace websocket {
 
-class Channel {
+class Config {
   
   short getPort();
   void  setPort(short port);
@@ -11,3 +13,5 @@ class Channel {
 };
 
 } // websocket
+
+#endif
