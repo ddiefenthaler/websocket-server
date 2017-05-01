@@ -28,7 +28,7 @@ class Channel {
   
   private:
     int                  _sockfd;
-    struct * bufferevent _bev;
+    struct bufferevent * _bev;
 };
 
 #endif

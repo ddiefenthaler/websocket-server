@@ -11,4 +11,4 @@ all: $(CXXFILES:%.cc=build/%.o)
 	ld -o websocket-server $+ -levent
 
 build/%.o: src/%.cc
-	g++ -o $@ $(CFLAGS) $+
+	g++ -o $@ $(CXXFLAGS) $+
