@@ -6,6 +6,7 @@
 #include <event2/bufferevent.h>
 
 #include <map>
+#include <utility>
 
 #include <websocket/network.h>
 
@@ -17,17 +18,17 @@
 
 int main(int argc, char * argv[]) {
   //ProgramArgs programargs(argc, argv);
-  Config      config; // default configuration
+  websocket::Config      config; // default configuration
   //config.load(programargs.getConfigFile());
   //config.apply(programargs);
   
-  std::map<int, Connection> connections;
+  std::map<int, websocket::Connection> connections;
   
   //start worker threads
   
   struct event_base * base;
   
-  std::pair<std::map<int, Connection> *, struct event_base *> callback_args = make_pair(&connections, base);
+  std::pair<std::map<int, Connection> *, struct event_base *> callback_args = std::make_pair(&connections, base);
   
   evutil_socket_t sockfd = websocket::create_listen_socket(config);
   

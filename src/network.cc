@@ -34,7 +34,7 @@ void accept_new_connection(evutil_socket_t sockfd, short event, void * arg) {
   connections[static_cast<int>(ch)] = Connection(std::move(ch));
 }
 
-evutil_socket_t create_listen_socket(const Config & config) {
+evutil_socket_t create_listen_socket(const websocket::Config & config) {
   struct sockaddr_in sin;
   
   sin.sin_family = AF_INET;
