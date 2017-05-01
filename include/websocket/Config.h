@@ -10,7 +10,7 @@ class Config {
     void  setPort(short port);
     
   private:
-    short _port = 80;
+    short _port = 8080;
 };
 
 } // websocket
