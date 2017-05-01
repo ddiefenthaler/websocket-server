@@ -18,4 +18,16 @@ bool Connection::establishing() const {
   return _incoming.size() >= 1;
 }
 
+std::size_t Connection::incomingSize() const {
+  return _incoming.size();
+}
+
+Message & Connection::getLastIncomingMsg() {
+  return _incoming.back();
+}
+
+void Connection::appendIncoming(Message && msg) {
+  _incoming.push_back(msg);
+}
+
 } // websocket

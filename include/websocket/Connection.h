@@ -20,6 +20,12 @@ public:
 
   bool establishing() const;
 
+  std::size_t incomingSize() const;
+
+  Message & getLastIncomingMsg();
+
+  void appendIncoming(Message && msg);
+
 private:
   bool _established = false;
   Channel _channel;
