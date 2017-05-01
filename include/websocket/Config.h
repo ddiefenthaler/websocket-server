@@ -4,10 +4,11 @@
 namespace websocket {
 
 class Config {
-  
-  short getPort();
-  void  setPort(short port);
-  
+
+  public:
+    short getPort() const;
+    void  setPort(short port);
+    
   private:
     short _port = 80;
 };

@@ -1,14 +1,14 @@
 
-CXXFLAGS = -Wall -I ./include/
+CXXFLAGS = -c -Wall -I ./include/
 
-LDFLAGS = 
+LDFLAGS = -lpthread -levent
 
 CXXFILES = main.cc Config.cc network.cc Connection.cc Channel.cc
 
 .PHONY: all
 
 all: $(CXXFILES:%.cc=build/%.o)
-	ld -o websocket-server $+ -levent
+	g++ -o websocket-server $+ $(LDFLAGS)
 
 build/%.o: src/%.cc
 	g++ -o $@ $(CXXFLAGS) $+

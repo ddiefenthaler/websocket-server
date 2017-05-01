@@ -1,3 +1,4 @@
+#include <utility>
 
 #include <websocket/Connection.h>
 #include <websocket/Channel.h>
@@ -5,19 +6,8 @@
 
 namespace websocket {
 
-class Connection {
-  
-  Connection() = default;
-  
-  Connection(int sockfd)
-  : _channel(sockfd)
+Connection::Connection(Channel && channel)
+  : _channel(std::move(channel))
   {}
-  
-  private:
-    bool established = false;
-    Channel _channel;
-//    std::vector<Message> _incoming;
-//    std::vector<Message> _outgoing;
-};
 
 } // websocket

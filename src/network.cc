@@ -5,6 +5,8 @@
 #include <event2/buffer.h>
 #include <event2/bufferevent.h>
 
+#include <map>
+
 #include <websocket/network.h>
 #include <websocket/Config.h>
 #include <websocket/Channel.h>
@@ -17,7 +19,7 @@ void receive_from_channel(struct bufferevent * bev, void * arg) {
   
 }
 
-void error_from_channel(struct bufferevent * bev, void * arg) {
+void error_from_channel(struct bufferevent * bev, short error, void * arg) {
   std::map<int, Connection> & connections = *reinterpret_cast<std::map<int, Connection> *>(arg);
   
 }
@@ -27,7 +29,8 @@ void accept_new_connection(evutil_socket_t sockfd, short event, void * arg) {
   std::map<int, Connection> & connections = *args.first;
   struct event_base & base = *args.second;
   struct sockaddr_storage saddr;
-  int fd = accept(sockfd, reinterpret_cast<const struct sockaddr*>(&saddr), sizeof(saddr));
+  socklen_t slen = sizeof(saddr);
+  int fd = accept(sockfd, reinterpret_cast<struct sockaddr*>(&saddr), &slen);
   
   evutil_make_socket_nonblocking(fd);
   Channel ch(fd,base);

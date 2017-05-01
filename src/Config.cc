@@ -2,17 +2,11 @@
 
 namespace websocket {
 
-class Channel {
-  
-  short getPort() {
+short Config::getPort() const {
     return _port;
   }
-  void  setPort(short port) {
+void  Config::setPort(short port) {
     _port = port;
   }
-  
-  private:
-    short _port = 80;
-};
 
 } // websocket

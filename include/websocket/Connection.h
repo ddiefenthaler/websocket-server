@@ -7,11 +7,13 @@
 namespace websocket {
 
 class Connection {
-  
-  Connection() = default;
-  
-  Connection(int sockfd);
-  
+
+  public:
+
+    Connection() = default;
+    
+    Connection(Channel && channel);
+    
   private:
     bool established = false;
     Channel _channel;
