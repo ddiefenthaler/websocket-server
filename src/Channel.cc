@@ -1,7 +1,7 @@
 #include <event2/event.h>
 #include <event2/bufferevent.h>
 
-#include <webscoket/main.h>
+#include <websocket/main.h>
 #include <websocket/Channel.h>
 #include <websocket/Connection.h>
 #include <websocket/network.h>

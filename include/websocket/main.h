@@ -11,7 +11,7 @@ namespace websocket {
 
 Config                    config;
 std::map<int, Connection> connections;
-TaskQueue                 tq;
+TaskQueue<2>              tq;
 struct event_base       * base;
 
 }

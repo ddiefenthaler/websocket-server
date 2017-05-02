@@ -31,7 +31,7 @@ private:
   bool _establishing = false;
   Channel _channel;
   bool _incompleteIncoming = false;
-  Message _incompleteMsg = nullptr;
+  Message _incompleteMsg;
 };
 
 } // websocket

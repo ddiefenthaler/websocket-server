@@ -7,14 +7,16 @@
 #include <mutex>
 #include <condition_variable>
 
+#include <websocket/Message.h>
+
 struct Task {
   int channel;
   Message msg;
   
   Task(int _channel, Message && _msg)
-  : type(_type), msg(_msg)
+  : channel(_channel), msg(_msg)
   {}
-}
+};
 
 template <std::size_t prios>
 class TaskQueue {
@@ -23,7 +25,7 @@ public:
 
   TaskQueue() = default;
   
-  push(std::size_t prio, Task task) {
+  void push(std::size_t prio, Task && task) {
     if(prio < prios) {
       std::lock_guard<std::mutex> lock(_mutex);
       _queues[prio].push_back(Task);
@@ -42,6 +44,7 @@ public:
     });
     
     // todo atomic to get currently working threads
+    // this would enable to possible to prevent blocking all threads
     
     for(int i=0; i < prios; i++) {
       if(_queues[i].size > 0) {

@@ -21,7 +21,7 @@ void error_from_channel(struct bufferevent * bev, short error, void * arg);
 
 void accept_new_connection(evutil_socket_t sockfd, short event, void * arg);
 
-evutil_socket_t create_listen_socket(const websocket::Config & config);
+evutil_socket_t create_listen_socket();
 
 } //websocket
 

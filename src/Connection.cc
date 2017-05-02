@@ -18,19 +18,16 @@ bool Connection::establishing() const {
   return _establishing;
 }
 
-std::size_t Connection::incomingSize() const {
-  return _incoming.size();
-}
-
 Message * Connection::getIncompleteMsg() {
   if(_incompleteIncoming) {
-    return &_msg;
+    return &_incompleteMsg;
   }
+  return nullptr;
 }
 
 void Connection::setIncompleteMsg(Message && msg) {
   _incompleteIncoming = true;
-  _msg = msg;
+  _incompleteMsg = msg;
 }
 
 void Connection::unsetIncompleteMsg() {
