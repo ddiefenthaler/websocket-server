@@ -9,6 +9,8 @@
 
 #include <websocket/Message.h>
 
+namespace websocket {
+
 struct Task {
   int channel;
   Message msg;
@@ -59,8 +61,9 @@ private:
   std::array<std::deque<Task>,prios> _queues;
   std::mutex                         _mutex;
   std::condition_variable            _cv;
-  
 
 };
+
+} // websocket
 
 #endif

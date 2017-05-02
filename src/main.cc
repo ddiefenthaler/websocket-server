@@ -18,6 +18,15 @@
  * starting the necessary threads.
  */
 
+namespace websocket {
+
+Config                    config;
+std::map<int, Connection> connections;
+TaskQueue<2>              tq;
+struct event_base       * base;
+
+}
+
 int main(int argc, char * argv[]) {
   //ProgramArgs programargs(argc, argv);
   //websocket::Config      config; // default configuration
