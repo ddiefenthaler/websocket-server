@@ -4,9 +4,11 @@
 #include <array>
 #include <deque>
 #include <thread>
+#include <atomic>
 #include <mutex>
 #include <condition_variable>
 
+#include <websocket/Config.h>
 #include <websocket/Message.h>
 
 namespace websocket {
@@ -37,16 +39,19 @@ public:
   
   Task take() {
     std::unique_lock<std::mutex> lock(_mutex);
+    ++_waiting;
     _cv.wait(lock, [&]{
       for(int i=0; i < prios; i++) {
         if(_queues[i].size > 0) {
           return true;
         }
+        // If only one thread is waiting only handle prio 0
+        if(_waiting <= 1) {
+          return false;
+        }
       }
     });
-    
-    // todo atomic to get currently working threads
-    // this would enable to possible to prevent blocking all threads
+    --waiting;
     
     for(int i=0; i < prios; i++) {
       if(_queues[i].size > 0) {
@@ -59,6 +64,7 @@ public:
 
 private:
   std::array<std::deque<Task>,prios> _queues;
+  std::atomic<unsigned short>        _waiting = std::atomic<unsigned short>(0);
   std::mutex                         _mutex;
   std::condition_variable            _cv;
 
