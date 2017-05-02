@@ -4,7 +4,10 @@
 #include <vector>
 #include <array>
 
+
 namespace websocket {
+
+class Connection;
 
 enum MessageType : int {
   OpeningHandshake_Client = -1,
@@ -34,6 +37,10 @@ public:
   void setMask(unsigned char * mask);
 
   long long getFullLength() const;
+
+  void handle();
+  void send(Connection & con);
+  void broadcast();
 
 private:
 

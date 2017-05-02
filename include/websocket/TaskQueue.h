@@ -28,7 +28,7 @@ public:
   void push(std::size_t prio, Task && task) {
     if(prio < prios) {
       std::lock_guard<std::mutex> lock(_mutex);
-      _queues[prio].push_back(Task);
+      _queues[prio].push_back(task);
       _cv.notify_all();
     }
   }
