@@ -15,19 +15,26 @@ bool Connection::is_established() const {
 }
 
 bool Connection::establishing() const {
-  return _incoming.size() >= 1;
+  return _establishing;
 }
 
 std::size_t Connection::incomingSize() const {
   return _incoming.size();
 }
 
-Message & Connection::getLastIncomingMsg() {
-  return _incoming.back();
+Message * Connection::getIncompleteMsg() {
+  if(_incompleteIncoming) {
+    return &_msg;
+  }
 }
 
-void Connection::appendIncoming(Message && msg) {
-  _incoming.push_back(msg);
+void Connection::setIncompleteMsg(Message && msg) {
+  _incompleteIncoming = true;
+  _msg = msg;
+}
+
+void Connection::unsetIncompleteMsg() {
+  _incompleteIncoming = false;
 }
 
 } // websocket

@@ -9,6 +9,7 @@
 #include <map>
 #include <utility>
 
+#include <main.h>
 #include <websocket/network.h>
 
 /**
@@ -19,25 +20,23 @@
 
 int main(int argc, char * argv[]) {
   //ProgramArgs programargs(argc, argv);
-  websocket::Config      config; // default configuration
-  //config.load(programargs.getConfigFile());
-  //config.apply(programargs);
+  //websocket::Config      config; // default configuration
+  //websocket::config.load(programargs.getConfigFile());
+  //websocket::config.apply(programargs);
   
-  std::map<int, websocket::Connection> connections;
+  //std::map<int, websocket::Connection> connections;
   
   //start worker threads
   
   evthread_use_pthreads();
   
-  struct event_base * base = event_base_new();
+  websocket::base = event_base_new();
   
-  std::pair<std::map<int, websocket::Connection> *, struct event_base *> callback_args = std::make_pair(&connections, base);
+  evutil_socket_t sockfd = websocket::create_listen_socket();
   
-  evutil_socket_t sockfd = websocket::create_listen_socket(config);
-  
-  struct event * listen_event = event_new(base, sockfd, EV_READ|EV_PERSIST, websocket::accept_new_connection, (void *)&callback_args);
+  struct event * listen_event = event_new(websocket::base, sockfd, EV_READ|EV_PERSIST, websocket::accept_new_connection, nullptr);
   
   event_add(listen_event,nullptr);
   
-  event_base_dispatch(base);
+  event_base_dispatch(websocket::base);
 }

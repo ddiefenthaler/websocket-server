@@ -1,6 +1,7 @@
 #include <event2/event.h>
 #include <event2/bufferevent.h>
 
+#include <webscoket/main.h>
 #include <websocket/Channel.h>
 #include <websocket/Connection.h>
 #include <websocket/network.h>
@@ -11,11 +12,11 @@ Channel::Channel()
   : _sockfd(-1), _bev(nullptr)
   {}
 
-Channel::Channel(int sockfd, struct event_base & base, std::map<int, Connection> & connections)
+Channel::Channel(int sockfd)
   : _sockfd(sockfd)
   {
-    _bev = bufferevent_socket_new(&base, sockfd, BEV_OPT_CLOSE_ON_FREE);
-    bufferevent_setcb(_bev, receive_from_channel, nullptr, error_from_channel, &connections);
+    _bev = bufferevent_socket_new(base, sockfd, BEV_OPT_CLOSE_ON_FREE);
+    bufferevent_setcb(_bev, receive_from_channel, nullptr, error_from_channel, nullptr);
     bufferevent_setwatermark(_bev, EV_READ, 0, 16384);
     bufferevent_enable(_bev, EV_READ|EV_WRITE);
   }

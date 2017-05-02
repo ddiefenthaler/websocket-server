@@ -9,15 +9,13 @@
 
 namespace websocket {
 
-class Connection;
-
 class Channel {
 
 public:
   
   Channel();
   
-  Channel(int sockfd, struct event_base & base, std::map<int, Connection> & connections);
+  Channel(int sockfd);
   
   Channel(const Channel &) = delete;
   

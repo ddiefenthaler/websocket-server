@@ -7,18 +7,12 @@
 #include <mutex>
 #include <condition_variable>
 
-enum TaskType : int {
-  IncomingMessage_User,
-  IncomingMessage_Control,
-  IncomingMessage_Open
-};
-
 struct Task {
-  TaskType type;
   int channel;
+  Message msg;
   
-  Task(TaskType _type, int _channel)
-  : type(_type), channel(_channel)
+  Task(int _channel, Message && _msg)
+  : type(_type), msg(_msg)
   {}
 }
 

@@ -20,16 +20,18 @@ public:
 
   bool establishing() const;
 
-  std::size_t incomingSize() const;
+  Message * getIncompleteMsg();
 
-  Message & getLastIncomingMsg();
+  void setIncompleteMsg(Message && msg);
 
-  void appendIncoming(Message && msg);
+  void unsetIncompleteMsg();
 
 private:
   bool _established = false;
+  bool _establishing = false;
   Channel _channel;
-  std::deque<Message> _incoming;
+  bool _incompleteIncoming = false;
+  Message _incompleteMsg = nullptr;
 };
 
 } // websocket

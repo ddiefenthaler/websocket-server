@@ -25,8 +25,6 @@ public:
 
   Message(MessageType type, std::size_t size = 0);
 
-  bool isComplete() const;
-
   std::vector<unsigned char> & getPayload();
 
   void setType(MessageType type);
@@ -34,14 +32,12 @@ public:
   void setMasked(bool masked);
   void setFullLength(long long length);
   void setMask(unsigned char * mask);
-  void setComplete(bool);
 
   long long getFullLength() const;
 
 private:
 
   bool               _fin = true;
-  bool               _fully = true;
   MessageType        _type;
   bool               _masked = false;
   long long          _full_length;

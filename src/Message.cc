@@ -13,10 +13,6 @@ std::vector<unsigned char> & Message::getPayload() {
   return _payload;
 }
 
-bool Message::isComplete() const {
-  return _fully;
-}
-
 void Message::setType(MessageType type) {
   _type = type;
 }
@@ -36,14 +32,9 @@ void Message::setMask(unsigned char * mask) {
   }
 }
 
-void Message::setComplete(bool fully) {
-  _fully = fully;
-}
-
 long long Message::getFullLength() const {
   return _full_length;
 }
-
 
 }
 

@@ -7,6 +7,7 @@
 
 #include <map>
 
+#include <websocket/main.h>
 #include <websocket/network.h>
 #include <websocket/Config.h>
 #include <websocket/Channel.h>
@@ -16,13 +17,12 @@
 namespace websocket {
 
 void receive_from_channel(struct bufferevent * bev, void * arg) {
-  std::map<int, Connection> & connections = *reinterpret_cast<std::map<int, Connection> *>(arg);
 
   Connection & connection = connections.find(bufferevent_getfd(bev))->second;
 
   struct evbuffer * input = bufferevent_get_input(bev);
   if(connection.is_established() || connection.establishing()) {
-    if(connection.incomingSize() == 0 || connection.getLastIncomingMsg().isComplete()) {
+    if(connection.getIncompleteMsg() == nullptr) {
       int len = evbuffer_get_length(input);
       unsigned char * buffer_begin;
       if(len < 14) {
@@ -57,33 +57,34 @@ void receive_from_channel(struct bufferevent * bev, void * arg) {
       auto payload = msg.getPayload();
       len = evbuffer_get_length(input);
       if(len >= msg.getFullLength()) {
-        msg.setComplete(true);
         payload.resize(msg.getFullLength());
         evbuffer_remove(input, payload.data(), msg.getFullLength());
+
+        tq.push(0, msg);
       } else {
-        msg.setComplete(false);
         payload.resize(len);
         evbuffer_remove(input, payload.data(), len);
+
+        connection.setIncompleteMsg(std::move(msg));
       }
-
-      connection.appendIncoming(std::move(msg));
-
-    } else {
-      Message & msg = connection.getLastIncomingMsg();
+    } else { // Complete last msg
+      Message & msg = *connection.getIncompleteMsg();
       auto payload = msg.getPayload();
       int oldsize = payload.size();
       int remaining = msg.getFullLength() - oldsize;
       int len = evbuffer_get_length(input);
       if(len >= remaining) {
-        msg.setComplete(true);
         payload.resize(oldsize + remaining);
         evbuffer_remove(input, payload.data() + oldsize, remaining);
+
+        tq.push(0, std::move(msg));
+        connection.unsetIncompleteMsg();
       } else {
         payload.resize(oldsize + len);
         evbuffer_remove(input, payload.data() + oldsize, len);
       }
     }
-  } else {
+  } else { // openening connection
     struct evbuffer_ptr p;
     evbuffer_ptr_set(input, &p, 0, EVBUFFER_PTR_SET);
     p = evbuffer_search(input, "\r\n\r\n", 4, &p);
@@ -97,15 +98,13 @@ void receive_from_channel(struct bufferevent * bev, void * arg) {
 
       bufferevent_setwatermark(bev, EV_READ, 0, 16384);
 
-      // todo enque_incoming
-      // todo enque task
+      tq.push(0,std::move(msg));
     }
   }
 
 }
 
 void error_from_channel(struct bufferevent * bev, short error, void * arg) {
-  std::map<int, Connection> & connections = *reinterpret_cast<std::map<int, Connection> *>(arg);
 
   //if(error & BEV_EVENT_EOF) {
     connections.erase(connections.find(bufferevent_getfd(bev)));
@@ -114,19 +113,16 @@ void error_from_channel(struct bufferevent * bev, short error, void * arg) {
 }
 
 void accept_new_connection(evutil_socket_t sockfd, short event, void * arg) {
-  auto & args = *reinterpret_cast<std::pair<std::map<int, Connection> *, struct event_base *> *>(arg);
-  std::map<int, Connection> & connections = *args.first;
-  struct event_base & base = *args.second;
   struct sockaddr_storage saddr;
   socklen_t slen = sizeof(saddr);
   int fd = accept(sockfd, reinterpret_cast<struct sockaddr*>(&saddr), &slen);
 
   evutil_make_socket_nonblocking(fd);
-  Channel ch(fd,base,connections);
+  Channel ch(fd);
   connections.insert(std::make_pair(fd, Connection(std::move(ch))));
 }
 
-evutil_socket_t create_listen_socket(const websocket::Config & config) {
+evutil_socket_t create_listen_socket() {
   struct sockaddr_in sin;
 
   sin.sin_family = AF_INET;
