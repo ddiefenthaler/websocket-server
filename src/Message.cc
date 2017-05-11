@@ -32,6 +32,10 @@ void Message::setMask(unsigned char * mask) {
   }
 }
 
+MessageType Message::getType() const {
+  return _type;
+}
+
 long long Message::getFullLength() const {
   return _full_length;
 }
