@@ -27,7 +27,9 @@ class TaskQueue {
 
 public:
 
-  TaskQueue() = default;
+  TaskQueue()
+  : _waiting(0)
+  {}
   
   void push(std::size_t prio, Task && task) {
     if(prio < prios) {
@@ -51,7 +53,7 @@ public:
         }
       }
     });
-    --waiting;
+    --_waiting;
     
     for(int i=0; i < prios; i++) {
       if(_queues[i].size > 0) {
@@ -64,7 +66,7 @@ public:
 
 private:
   std::array<std::deque<Task>,prios> _queues;
-  std::atomic<unsigned short>        _waiting = std::atomic<unsigned short>(0);
+  std::atomic<unsigned short>        _waiting;
   std::mutex                         _mutex;
   std::condition_variable            _cv;
 

@@ -1,10 +1,12 @@
 #ifndef WEBSOCKET_SERVER__CHANNEL
 #define WEBSOCKET_SERVER__CHANNEL
 
-#include <map>
-
 #include <event2/event.h>
 #include <event2/bufferevent.h>
+
+#include <map>
+
+#include <websocket/Message.h>
 
 
 namespace websocket {

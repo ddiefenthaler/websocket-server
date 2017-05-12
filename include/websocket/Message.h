@@ -33,6 +33,10 @@ public:
   : _type(type), _payload(size)
   {}
 
+  inline const std::vector<unsigned char> & getPayload() const {
+    return _payload;
+  }
+
   inline std::vector<unsigned char> & getPayload() {
     return _payload;
   }
@@ -46,7 +50,7 @@ public:
   inline void setMasked(bool masked) {
     _masked = masked;
   }
-  inline void setFullLength(unsigned long long length)
+  inline void setFullLength(unsigned long long length) {
     _full_length = length;
   }
   inline void setMask(unsigned char * mask) {
@@ -67,7 +71,7 @@ public:
   inline unsigned long long getFullLength() const {
     return _full_length;
   }
-  inline std::array<unsigned char,4> & getMask() const {
+  inline const std::array<unsigned char,4> & getMask() const {
     return _mask;
   }
 

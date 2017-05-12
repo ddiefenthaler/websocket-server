@@ -16,7 +16,7 @@ class Config {
     inline unsigned short getNumberThreads() const {
       return _number_threads;
     }
-    inline void  setNumberThreads()(unsigned short number_threads) {
+    inline void  setNumberThreads(unsigned short number_threads) {
       _number_threads = number_threads;
     }
     

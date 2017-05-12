@@ -5,7 +5,7 @@
 
 namespace websocket {
 
-void Message::handle() {
+void Message::handle(int connection) {
   //if reinterpret_cast ....
 }
 
