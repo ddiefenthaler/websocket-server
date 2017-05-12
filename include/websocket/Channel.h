@@ -13,27 +13,24 @@ class Channel {
 
 public:
   
-  Channel();
+  Channel() = default;
+  Channel(const Channel &) = delete;
+  Channel & operator=(const Channel &) = delete;
+  Channel(Channel && other);
+  Channel & operator=(Channel && other);
   
   Channel(int sockfd);
-  
-  Channel(const Channel &) = delete;
-  
-  Channel(Channel && other);
-  
-  Channel & operator=(const Channel &) = delete;
-  
-  Channel & operator=(Channel && other);
   
   ~Channel();
   
   operator int();
   
-  //todo send_to
+  void send(const Message & msg);
+  void receive();
   
 private:
-    int                  _sockfd;
-    struct bufferevent * _bev;
+    int                  _sockfd = -1;
+    struct bufferevent * _bev    = nullptr;
 };
 
 } // websocket

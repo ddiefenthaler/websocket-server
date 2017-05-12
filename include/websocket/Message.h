@@ -21,20 +21,55 @@ enum MessageType : int {
 class Message {
 
 public:
+  typedef Message self_t;
+
   Message() = default;
+  Message(const self_t &) = default;
+  Message & operator=(const self_t &) = default;
+  Message(self_t &&) = default;
+  Message & operator=(self_t &&) = default;
 
-  Message(MessageType type, std::size_t size = 0);
+  Message(MessageType type, std::size_t size = 0)
+  : _type(type), _payload(size)
+  {}
 
-  std::vector<unsigned char> & getPayload();
+  inline std::vector<unsigned char> & getPayload() {
+    return _payload;
+  }
 
-  void setType(MessageType type);
-  void setFin(bool fin);
-  void setMasked(bool masked);
-  void setFullLength(long long length);
-  void setMask(unsigned char * mask);
+  inline void setType(MessageType type) {
+    _type = type;
+  }
+  inline void setFin(bool fin) {
+    _fin = fin;
+  }
+  inline void setMasked(bool masked) {
+    _masked = masked;
+  }
+  inline void setFullLength(unsigned long long length)
+    _full_length = length;
+  }
+  inline void setMask(unsigned char * mask) {
+    for(int i=0; i < 4; i++) {
+      _mask[i] = mask[i];
+    }
+  }
 
-  MessageType getType() const;
-  long long getFullLength() const;
+  inline MessageType getType() const {
+    return _type;
+  }
+  inline bool isFin() const {
+    return _fin;
+  }
+  inline bool isMasked() const {
+    return _masked;
+  }
+  inline unsigned long long getFullLength() const {
+    return _full_length;
+  }
+  inline std::array<unsigned char,4> & getMask() const {
+    return _mask;
+  }
 
   void handle(int connection);
 
@@ -43,7 +78,7 @@ private:
   bool               _fin = true;
   MessageType        _type;
   bool               _masked = false;
-  long long          _full_length;
+  unsigned long long _full_length;
   std::array<unsigned char,4> _mask {};
   std::vector<unsigned char>  _payload;
 };
