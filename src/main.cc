@@ -7,6 +7,7 @@
 #include <event2/bufferevent.h>
 
 #include <map>
+#include <vector>
 #include <utility>
 
 #include <websocket/main.h>
@@ -35,7 +36,10 @@ int main(int argc, char * argv[]) {
   
   //std::map<int, websocket::Connection> connections;
   
-  //start worker threads
+  std::vector<std::thread> worker_threads;
+  for(int i=0; i < config.getNumberThreads(); i++) {
+    worker_threads.push_back(std::thread(websocket::worker_thread));
+  }
   
   evthread_use_pthreads();
   
@@ -48,4 +52,8 @@ int main(int argc, char * argv[]) {
   event_add(listen_event,nullptr);
   
   event_base_dispatch(websocket::base);
+  
+  for(auto & wt : worker_threads) {
+      wt.join();
+  }
 }

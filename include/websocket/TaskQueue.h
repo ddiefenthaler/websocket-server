@@ -57,7 +57,7 @@ public:
     
     for(int i=0; i < prios; i++) {
       if(_queues[i].size > 0) {
-        Task & t = _queues[i].front();
+        Task t = _queues[i].front();
         _queues[i].pop_front();
         return t;
       }
