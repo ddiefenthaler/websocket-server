@@ -13,11 +13,11 @@ private:
   using self_t = circular_iterator<Iter>;
 
 public:
-  using difference_type   = Iter::difference_type;
-  using value_type        = Iter::value_type;
-  using pointer           = Iter::pointer;
-  using reference         = Iter::reference;
-  using iterator_category = Iter::iterator_category;
+  using difference_type   = typename std::iterator_traits<Iter>::difference_type;
+  using value_type        = typename std::iterator_traits<Iter>::value_type;
+  using pointer           = typename std::iterator_traits<Iter>::pointer;
+  using reference         = typename std::iterator_traits<Iter>::reference;
+  using iterator_category = typename std::iterator_traits<Iter>::iterator_category;
 
 public:
   circular_iterator() = default;
@@ -38,7 +38,7 @@ public:
   }
   
   reference operator[](difference_type n) {
-    return *(*this + n)
+    return *(*this + n);
   }
   
   self_t & operator++() {
@@ -161,6 +161,11 @@ private:
 };
 
 } // internal
+
+template <class Iter>
+internal::circular_iterator<Iter> make_circular_iterator(Iter first, Iter last) {
+  return internal::circular_iterator<Iter>(first, last);
+}
 
 } // websocket
 

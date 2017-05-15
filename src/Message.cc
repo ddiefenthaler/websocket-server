@@ -1,5 +1,6 @@
 #include <vector>
 #include <array>
+#include <algorithm>
 
 #include <websocket/Message.h>
 #include <websocket/internal/circular_iterator.h>
@@ -8,11 +9,12 @@ namespace websocket {
 
 void Message::demask() {
   if(_masked) {
-    std::transfrom(_payload.begin(), _payload.end(),
-                   internal::circular_iterator(_mask.begin(),_mask.end()),
-                   [](unsigned char p, unsigned char m){
+    std::transform(_payload.begin(), _payload.end(),
+                   make_circular_iterator(_mask.begin(),_mask.end()),
+                   _payload.begin(),
+                   [](const unsigned char & p, const unsigned char & m){
                      return p^m;
-                   })
+                   });
   }
 }
 
@@ -26,28 +28,28 @@ void Message::handle(int connection, int defered /* = 0 */) {
 
   if(_type == OpeningHandshake_Client) {
     auto & typedMsg = *reinterpret_cast<CppMessageType<OpeningHandshake_Client>::type *>(this);
-    typeMsg.handle(connection,1);
+    typedMsg.handle(connection,1);
   } else if(_type == OpeningHandshake_Server) {
     auto & typedMsg = *reinterpret_cast<CppMessageType<OpeningHandshake_Server>::type *>(this);
-    typeMsg.handle(connection,1);
+    typedMsg.handle(connection,1);
   } else if(_type == Continuation) {
     auto & typedMsg = *reinterpret_cast<CppMessageType<Continuation>::type *>(this);
-    typeMsg.handle(connection,1);
+    typedMsg.handle(connection,1);
   } else if(_type == UserMessage_Text) {
     auto & typedMsg = *reinterpret_cast<CppMessageType<UserMessage_Text>::type *>(this);
-    typeMsg.handle(connection,1);
+    typedMsg.handle(connection,1);
   } else if(_type == UserMessage_Binary) {
     auto & typedMsg = *reinterpret_cast<CppMessageType<UserMessage_Binary>::type *>(this);
-    typeMsg.handle(connection,1);
+    typedMsg.handle(connection,1);
   } else if(_type == ControlMessage_Close) {
     auto & typedMsg = *reinterpret_cast<CppMessageType<ControlMessage_Close>::type *>(this);
-    typeMsg.handle(connection,1);
+    typedMsg.handle(connection,1);
   } else if(_type == ControlMessage_Ping) {
     auto & typedMsg = *reinterpret_cast<CppMessageType<ControlMessage_Ping>::type *>(this);
-    typeMsg.handle(connection,1);
+    typedMsg.handle(connection,1);
   } else if(_type == ControlMessage_Pong) {
     auto & typedMsg = *reinterpret_cast<CppMessageType<ControlMessage_Pong>::type *>(this);
-    typeMsg.handle(connection,1);
+    typedMsg.handle(connection,1);
   } else {
     // todo error handling
   }

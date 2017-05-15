@@ -43,8 +43,8 @@ public:
     std::unique_lock<std::mutex> lock(_mutex);
     ++_waiting;
     _cv.wait(lock, [&]{
-      for(int i=0; i < prios; i++) {
-        if(_queues[i].size > 0) {
+      for(unsigned int i=0; i < prios; i++) {
+        if(_queues[i].size() > 0) {
           return true;
         }
         // If only one thread is waiting only handle prio 0
@@ -52,11 +52,12 @@ public:
           return false;
         }
       }
+      return false;
     });
     --_waiting;
     
-    for(int i=0; i < prios; i++) {
-      if(_queues[i].size > 0) {
+    for(unsigned int i=0; i < prios; i++) {
+      if(_queues[i].size() > 0) {
         Task t = _queues[i].front();
         _queues[i].pop_front();
         return t;

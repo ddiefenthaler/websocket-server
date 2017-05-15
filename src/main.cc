@@ -12,6 +12,7 @@
 
 #include <websocket/main.h>
 #include <websocket/network.h>
+#include <websocket/thread.h>
 
 /**
  * This file is for setting up the server,
@@ -37,7 +38,7 @@ int main(int argc, char * argv[]) {
   //std::map<int, websocket::Connection> connections;
   
   std::vector<std::thread> worker_threads;
-  for(int i=0; i < config.getNumberThreads(); i++) {
+  for(int i=0; i < websocket::config.getNumberThreads(); i++) {
     worker_threads.push_back(std::thread(websocket::worker_thread));
   }
   

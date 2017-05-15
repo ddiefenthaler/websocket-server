@@ -1,5 +1,6 @@
 
 #include <websocket/thread.h>
+#include <websocket/main.h>
 #include <websocket/TaskQueue.h>
 #include <websocket/Message.h>
 

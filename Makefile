@@ -3,8 +3,8 @@ CXXFLAGS = --std=c++11 -c -g -Wall -I ./include/
 
 LDFLAGS = -lpthread -levent -levent_pthreads
 
-HFILES = Config.h network.h Connection.h Channel.h Message.h thread.h
-CXXFILES = main.cc network.cc Connection.cc Channel.cc Message.cc
+HFILES = Config.h network.h thread.h Connection.h Channel.h Message.h thread.h
+CXXFILES = main.cc network.cc thread.cc Connection.cc Channel.cc Message.cc
 
 .PHONY: all clean rebuild
 
