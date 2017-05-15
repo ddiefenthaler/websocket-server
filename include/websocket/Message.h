@@ -4,7 +4,6 @@
 #include <vector>
 #include <array>
 
-
 namespace websocket {
 
 enum MessageType : int {
@@ -75,7 +74,8 @@ public:
     return _mask;
   }
 
-  void handle(int connection);
+  void demask();
+  void handle(int connection, int defered = 0);
 
 private:
 
@@ -87,14 +87,14 @@ private:
   std::vector<unsigned char>  _payload;
 };
 
-class OpenHandshakeClientMsg : public Message {};
-class OpenHandshakeServerMsg : public Message {};
-class ContinuationMsg : public Message {};
-class TextUserMsg : public Message {};
-class BinaryUserMsg : public Message {};
-class CloseControlMsg : public Message {};
-class PingControlMsg : public Message {};
-class PongControlMsg : public Message {};
+class OpenHandshakeClientMsg : public Message {public: void handle(int connection, int defered = 1);};
+class OpenHandshakeServerMsg : public Message {public: void handle(int connection, int defered = 1);};
+class ContinuationMsg : public Message {public: void handle(int connection, int defered = 1);};
+class TextUserMsg : public Message {public: void handle(int connection, int defered = 1);};
+class BinaryUserMsg : public Message {public: void handle(int connection, int defered = 1);};
+class CloseControlMsg : public Message {public: void handle(int connection, int defered = 1);};
+class PingControlMsg : public Message {public: void handle(int connection, int defered = 1);};
+class PongControlMsg : public Message {public: void handle(int connection, int defered = 1);};
 
 template <MessageType t>
 struct CppMessageType {
