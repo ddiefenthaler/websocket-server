@@ -11,20 +11,49 @@ namespace websocket {
 class Connection {
 
 public:
-
+  
   Connection() = default;
+  Connection(const Connection &) = delete;
+  Connection & operator=(const Connection &) = delete;
+  Connection(Connection && other) = default;
+  Connection & operator=(Connection && other) = default;
 
-  Connection(Channel && channel);
+  Connection(Channel && channel)
+  : _channel(std::move(channel))
+  {}
 
-  bool is_established() const;
+  inline bool is_established() const {
+    return _established;
+  }
+  inline bool establishing() const {
+    return _establishing;
+  }
 
-  bool establishing() const;
+  inline void set_established(bool ested) {
+    _established = ested;
+  }
+  inline void set_establishing(bool esting) {
+    _establishing = esting;
+  }
 
-  Message * getIncompleteMsg();
-
-  void setIncompleteMsg(Message && msg);
-
-  void unsetIncompleteMsg();
+  inline Message * getIncompleteMsg() {
+    // pointer as Maybe-type
+    if(_incompleteIncoming) {
+      return &_incompleteMsg;
+    }
+    return nullptr;
+  }
+  inline void setIncompleteMsg(Message && msg) {
+    _incompleteIncoming = true;
+    _incompleteMsg = msg;
+  }
+  inline void unsetIncompleteMsg() {
+    _incompleteIncoming = false;
+  }
+  
+  inline void send(const Message & msg) {
+    _channel.send(msg);
+  }
 
 private:
   bool _established = false;

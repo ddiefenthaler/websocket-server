@@ -111,6 +111,7 @@ void Channel::receive() {
   Connection & connection = connections.find(_sockfd)->second;
 
   // todo state machine instead for better code readability
+  // todo states from rfc: connecting, ...
   struct evbuffer * input = bufferevent_get_input(_bev);
   if(connection.is_established() || connection.establishing()) {
     if(connection.getIncompleteMsg() == nullptr) {
@@ -190,6 +191,8 @@ void Channel::receive() {
       bufferevent_setwatermark(_bev, EV_READ, 0, 16384);
 
       tq.push(0,Task(_sockfd,std::move(msg)));
+
+      connection.set_establishing(true);
     }
   }
 
