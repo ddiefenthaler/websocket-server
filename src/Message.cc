@@ -6,17 +6,21 @@
 #include <websocket/Message.h>
 #include <websocket/main.h>
 #include <websocket/Connection.h>
-#include <websocket/internal/circular_iterator.h>
 
 namespace websocket {
 
 void Message::demask() {
   if(_masked) {
+    int i = -1;
+    auto mask = _mask;
     std::transform(_payload.begin(), _payload.end(),
-                   make_circular_iterator(_mask.begin(),_mask.end()),
                    _payload.begin(),
-                   [](const unsigned char & p, const unsigned char & m){
-                     return p^m;
+                   [&mask,&i](const unsigned char & p){
+                     ++i;
+                     if(i >= 3) {
+                       i=0;
+                     }
+                     return p^mask[i];
                    });
   }
 }
