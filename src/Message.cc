@@ -67,10 +67,10 @@ void OpenHandshakeClientMsg::handle(int connection, int defered) {
   auto & msg_payload = getPayload();
   // regex parsing
   // todo adjust to comply with RFC 2616
-  std::basic_regex<unsigned char> get_request_re(reinterpret_cast<const unsigned char *>("GET .* HTTP/1\\.1\\r\\n([^[:space:]]+[[:space:]]*:[[:space:]]*.+\\r\\n)+\\r\\n"));
+  std::regex get_request_re("GET .* HTTP/1\\.1\\r\\n([^[:space:]]+[[:space:]]*:[[:space:]]*.+\\r\\n)+\\r\\n");
   if(std::regex_match(msg_payload.begin(),msg_payload.end(),get_request_re)) {
     // parse header fields
-    std::basic_regex<unsigned char> header_field(reinterpret_cast<const unsigned char *>("([^[:space:]]+)[[:space:]]*:[[:space:]]*(.+)\\r\\n"));
+    std::regex header_field("([^[:space:]]+)[[:space:]]*:[[:space:]]*(.+)\\r\\n");
     std::regex_iterator<decltype(msg_payload.begin())> first_header_field(msg_payload.begin(),msg_payload.end(),header_field);
     std::regex_iterator<decltype(msg_payload.begin())> last_header_field;
     for(auto i = first_header_field; i != last_header_field; ++i) {
@@ -88,7 +88,7 @@ void OpenHandshakeClientMsg::handle(int connection, int defered) {
     "\r\n"
     "Invalid opening handshake for a websocket connection"
   );
-  br_payload = std::vector<unsigned char>(br_payload_str.begin(),br_payload_str.end());
+  br_payload = std::vector<char>(br_payload_str.begin(),br_payload_str.end());
   con.send(bad_request);
 }
 

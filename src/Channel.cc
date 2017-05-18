@@ -193,6 +193,8 @@ void Channel::receive() {
       tq.push(0,Task(_sockfd,std::move(msg)));
 
       connection.set_establishing(true);
+
+      evbuffer_add(bufferevent_get_output(_bev),"Hello World!\r\n", 14);
     }
   }
 

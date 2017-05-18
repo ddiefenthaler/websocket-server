@@ -32,11 +32,11 @@ public:
   : _type(type), _payload(size)
   {}
 
-  inline const std::vector<unsigned char> & getPayload() const {
+  inline const std::vector<char> & getPayload() const {
     return _payload;
   }
 
-  inline std::vector<unsigned char> & getPayload() {
+  inline std::vector<char> & getPayload() {
     return _payload;
   }
 
@@ -84,7 +84,7 @@ private:
   bool               _masked = false;
   unsigned long long _full_length;
   std::array<unsigned char,4> _mask {};
-  std::vector<unsigned char>  _payload;
+  std::vector<char>  _payload;
 };
 
 class OpenHandshakeClientMsg : public Message {public: void handle(int connection, int defered = 1);};
