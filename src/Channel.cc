@@ -1,4 +1,3 @@
-#include <event2/event.h>
 #include <event2/bufferevent.h>
 
 #include <limits>
@@ -10,13 +9,14 @@
 #include <websocket/Connection.h>
 #include <websocket/Message.h>
 #include <websocket/network.h>
+#include <websocket/internal/lockhelper.h>
 
 namespace websocket {
 
 Channel::Channel(int sockfd)
   : _sockfd(sockfd)
   {
-    _bev = bufferevent_socket_new(base, sockfd, BEV_OPT_CLOSE_ON_FREE);
+    _bev = bufferevent_socket_new(base, sockfd, BEV_OPT_CLOSE_ON_FREE | BEV_OPT_THREADSAFE);
     bufferevent_setcb(_bev, receive_from_channel, nullptr, error_from_channel, this);
     bufferevent_setwatermark(_bev, EV_READ, 0, 16384);
     bufferevent_enable(_bev, EV_READ|EV_WRITE);
@@ -48,6 +48,8 @@ Channel::operator int() {
   }
 
 void Channel::send(const Message & msg) {
+  internal::bufferevent_lockhelper lock(_bev);
+
   struct evbuffer * output = bufferevent_get_output(_bev);
 
   auto & payload = msg.getPayload();
