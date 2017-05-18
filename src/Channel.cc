@@ -14,38 +14,42 @@
 namespace websocket {
 
 Channel::Channel(int sockfd)
-  : _sockfd(sockfd)
-  {
-    _bev = bufferevent_socket_new(base, sockfd, BEV_OPT_CLOSE_ON_FREE | BEV_OPT_THREADSAFE);
-    bufferevent_setcb(_bev, receive_from_channel, nullptr, error_from_channel, this);
-    bufferevent_setwatermark(_bev, EV_READ, 0, 16384);
-    bufferevent_enable(_bev, EV_READ|EV_WRITE);
-  }
+: _sockfd(sockfd)
+{
+  _bev = bufferevent_socket_new(base, sockfd, BEV_OPT_CLOSE_ON_FREE | BEV_OPT_THREADSAFE);
+  bufferevent_setcb(_bev, receive_from_channel, nullptr, error_from_channel, this);
+  bufferevent_setwatermark(_bev, EV_READ, 0, 16384);
+  bufferevent_enable(_bev, EV_READ|EV_WRITE);
+}
 
 Channel::Channel(Channel && other) {
-    _sockfd = other._sockfd;
-    _bev = other._bev;
-    other._sockfd = -1;
-    other._bev = nullptr;
-  }
+  _sockfd = other._sockfd;
+  _bev = other._bev;
+  internal::bufferevent_lockhelper lock(_bev);
+  bufferevent_setcb(_bev, receive_from_channel, nullptr, error_from_channel, this);
+  other._sockfd = -1;
+  other._bev = nullptr;
+}
 
 Channel & Channel::operator=(Channel && other) {
-    _sockfd = other._sockfd;
-    _bev = other._bev;
-    other._sockfd = -1;
-    other._bev = nullptr;
-    return *this;
-  }
+  _sockfd = other._sockfd;
+  _bev = other._bev;
+  internal::bufferevent_lockhelper lock(_bev);
+  bufferevent_setcb(_bev, receive_from_channel, nullptr, error_from_channel, this);
+  other._sockfd = -1;
+  other._bev = nullptr;
+  return *this;
+}
 
 Channel::~Channel() {
-    if(_bev != nullptr) {
-      bufferevent_free(_bev);
-    }
+  if(_bev != nullptr) {
+    bufferevent_free(_bev);
   }
+}
 
 Channel::operator int() {
-    return _sockfd;
-  }
+  return _sockfd;
+}
 
 void Channel::send(const Message & msg) {
   internal::bufferevent_lockhelper lock(_bev);
@@ -195,8 +199,6 @@ void Channel::receive() {
       tq.push(0,Task(_sockfd,std::move(msg)));
 
       connection.set_establishing(true);
-
-      evbuffer_add(bufferevent_get_output(_bev),"Hello World!\r\n", 14);
     }
   }
 
