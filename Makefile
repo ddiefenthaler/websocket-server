@@ -6,7 +6,7 @@ LDFLAGS = -lpthread -levent -levent_pthreads
 HFILES = Config.h network.h thread.h Connection.h Channel.h Message.h thread.h
 CXXFILES = main.cc network.cc thread.cc Channel.cc Message.cc
 
-.PHONY: all clean rebuild
+.PHONY: all clean rebuild touch_rebuild
 
 all: websocket-server
 
@@ -20,6 +20,8 @@ clean:
 	rm -rf build/*
 	touch build/trigger_rebuild
 
-rebuild:
+rebuild: touch_rebuild all
+
+touch_rebuild:
 	touch build/trigger_rebuild
 
