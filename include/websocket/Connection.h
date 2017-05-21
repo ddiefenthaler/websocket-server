@@ -55,9 +55,15 @@ public:
     _channel.send(msg);
   }
 
+  inline void close() {
+    _closed = true;
+    _channel.close();
+  }
+
 private:
-  bool _established = false;
+  bool _established  = false;
   bool _establishing = false;
+  bool _closed       = false;
   Channel _channel;
   bool _incompleteIncoming = false;
   Message _incompleteMsg;

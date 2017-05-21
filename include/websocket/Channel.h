@@ -28,6 +28,7 @@ public:
   
   void send(const Message & msg);
   void receive();
+  void close();
   
 private:
     int                  _sockfd = -1;

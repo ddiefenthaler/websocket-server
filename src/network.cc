@@ -25,10 +25,18 @@ void receive_from_channel(struct bufferevent * bev, void * arg) {
 
 void error_from_channel(struct bufferevent * bev, short error, void * arg) {
 
-  //if(error & BEV_EVENT_EOF) {
+  if(error & BEV_EVENT_EOF) {
+    Connection & con = connections.find(bufferevent_getfd(bev))->second;
+    con.close();
+  } else  {
     connections.erase(connections.find(bufferevent_getfd(bev)));
-  //} else  {
-  //}
+  }
+}
+
+void close_channel(struct bufferevent * bev, void * arg) {
+
+  // todo  get_bufferlength != 0 => error
+  connections.erase(connections.find(bufferevent_getfd(bev)));
 }
 
 void accept_new_connection(evutil_socket_t sockfd, short event, void * arg) {

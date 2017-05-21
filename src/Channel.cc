@@ -204,4 +204,9 @@ void Channel::receive() {
 
 }
 
+void Channel::close() {
+  bufferevent_setwatermark(_bev, EV_WRITE, 1, 16384);
+  bufferevent_setcb(_bev, receive_from_channel, close_channel, error_from_channel, this);
+}
+
 } // websocket

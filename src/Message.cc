@@ -90,6 +90,8 @@ void OpenHandshakeClientMsg::handle(int connection, int defered) {
   );
   br_payload = std::vector<char>(br_payload_str.begin(),br_payload_str.end());
   con.send(bad_request);
+
+  con.close();
 }
 
 void OpenHandshakeServerMsg::handle(int connection, int defered) {
