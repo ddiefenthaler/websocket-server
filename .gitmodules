@@ -1,0 +1,39 @@
+[submodule "boost/uuid"]
+	path = boost/uuid
+	url = git@github.com:boostorg/uuid.git
+[submodule "boost/serialization"]
+	path = boost/serialization
+	url = git@github.com:boostorg/serialization.git
+[submodule "boost/static_assert"]
+	path = boost/static_assert
+	url = git@github.com:boostorg/static_assert.git
+[submodule "boost/config"]
+	path = boost/config
+	url = git@github.com:boostorg/config.git
+[submodule "boost/throw_exception"]
+	path = boost/throw_exception
+	url = git@github.com:boostorg/throw_exception.git
+[submodule "boost/assert"]
+	path = boost/assert
+	url = git@github.com:boostorg/assert.git
+[submodule "boost/iterator"]
+	path = boost/iterator
+	url = git@github.com:boostorg/iterator.git
+[submodule "boost/core"]
+	path = boost/core
+	url = git@github.com:boostorg/core.git
+[submodule "boost/mpl"]
+	path = boost/mpl
+	url = git@github.com:boostorg/mpl.git
+[submodule "boost/preprocessor"]
+	path = boost/preprocessor
+	url = git@github.com:boostorg/preprocessor.git
+[submodule "boost/type_traits"]
+	path = boost/type_traits
+	url = git@github.com:boostorg/type_traits.git
+[submodule "boost/detail"]
+	path = boost/detail
+	url = git@github.com:boostorg/detail.git
+[submodule "boost/utility"]
+	path = boost/utility
+	url = git@github.com:boostorg/utility.git

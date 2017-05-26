@@ -1,5 +1,8 @@
 
-CXXFLAGS = --std=c++11 -c -g -Wall -I ./include/
+BOOST_SUBLIBS = $(wildcard boost/*/)
+BOOST_HEADER  = boost/uuid/include/boost/uuid/sha1.hpp
+
+CXXFLAGS = --std=c++11 -c -g -Wall -I ./include/ $(BOOST_SUBLIBS:%=-I %include/)
 
 LDFLAGS = -lpthread -levent -levent_pthreads
 
@@ -13,7 +16,7 @@ all: websocket-server
 websocket-server: $(CXXFILES:%.cc=build/%.o)
 	g++ -o websocket-server $+ $(LDFLAGS)
 
-build/%.o: src/%.cc $(HFILES:%=include/websocket/%) build/trigger_rebuild
+build/%.o: src/%.cc $(HFILES:%=include/websocket/%) $(BOOST_HEADER) build/trigger_rebuild
 	g++ -o $@ $(CXXFLAGS) $<
 
 clean:
@@ -24,4 +27,8 @@ rebuild: touch_rebuild all
 
 touch_rebuild:
 	touch build/trigger_rebuild
+
+$(BOOST_HEADER): # pull_boost
+	git submodule init
+	git submodule update
 
