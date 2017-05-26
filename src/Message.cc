@@ -210,11 +210,25 @@ void BinaryUserMsg::handle(int connection, int defered) {
 }
 
 void CloseControlMsg::handle(int connection, int defered) {
-  // close connection
+  Connection & con = connections.find(connection)->second;
+  if(!con.is_closed()) {
+    Message close_msg(ControlMessage_Close);
+    con.send(close_msg);
+
+    con.close();
+  }
+  // todo logging
+  // todo masking for client mode
+  // todo close only when having this msg received
+  // (client mode only, RFC: The server MUST close the ... immediately)
 }
 
 void PingControlMsg::handle(int connection, int defered) {
-  // respond with pong
+  Connection & con = connections.find(connection)->second;
+  Message & pingpong_msg = *reinterpret_cast<Message *>(this);
+  pingpong_msg.setType(ControlMessage_Pong);
+  // todo masking for client mode
+  con.send(pingpong_msg);
 }
 
 void PongControlMsg::handle(int connection, int defered) {

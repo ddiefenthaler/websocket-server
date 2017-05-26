@@ -28,6 +28,9 @@ public:
   inline bool establishing() const {
     return _establishing;
   }
+  inline bool is_closed() const {
+    return _closed;
+  }
 
   inline void set_established(bool ested) {
     _established = ested;
