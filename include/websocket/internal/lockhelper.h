@@ -19,6 +19,7 @@ public:
   bufferevent_lockhelper & operator=(bufferevent_lockhelper && other) {
     _bev = other._bev;
     other._bev = nullptr;
+    return *this;
   }
 
   bufferevent_lockhelper(struct bufferevent * bev)

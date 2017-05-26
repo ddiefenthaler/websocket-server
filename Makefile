@@ -3,7 +3,7 @@ CXXFLAGS = --std=c++11 -c -g -Wall -I ./include/
 
 LDFLAGS = -lpthread -levent -levent_pthreads
 
-HFILES = Config.h network.h thread.h Connection.h Channel.h Message.h thread.h
+HFILES = main.h Config.h network.h thread.h Connection.h Channel.h Message.h TaskQueue.h internal/lockhelper.h
 CXXFILES = main.cc network.cc thread.cc Channel.cc Message.cc
 
 .PHONY: all clean rebuild touch_rebuild
