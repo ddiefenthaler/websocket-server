@@ -20,7 +20,7 @@ Channel::Channel(int sockfd)
 : _sockfd(sockfd)
 {
   _bev = bufferevent_socket_new(base, sockfd, BEV_OPT_CLOSE_ON_FREE | BEV_OPT_THREADSAFE);
-  bufferevent_setcb(_bev, receive_from_channel, nullptr, error_from_channel, this);
+  bufferevent_setcb(_bev, onreceive, nullptr, onerror, this);
   bufferevent_setwatermark(_bev, EV_READ, 0, 16384);
   bufferevent_enable(_bev, EV_READ|EV_WRITE);
 }
@@ -28,9 +28,9 @@ Channel::Channel(int sockfd)
 Channel::Channel(Channel && other) {
   _sockfd = other._sockfd;
   _bev = other._bev;
-  bufferevent_setcb(_bev, receive_from_channel, nullptr, error_from_channel, this);
   internal::bufferevent_lockhelper lockhelper(_bev);
   std::lock_guard<internal::bufferevent_lockhelper> lock(lockhelper);
+  bufferevent_setcb(_bev, onreceive, nullptr, onerror, this);
   other._sockfd = -1;
   other._bev = nullptr;
 }
@@ -38,9 +38,9 @@ Channel::Channel(Channel && other) {
 Channel & Channel::operator=(Channel && other) {
   _sockfd = other._sockfd;
   _bev = other._bev;
-  bufferevent_setcb(_bev, receive_from_channel, nullptr, error_from_channel, this);
   internal::bufferevent_lockhelper lockhelper(_bev);
   std::lock_guard<internal::bufferevent_lockhelper> lock(lockhelper);
+  bufferevent_setcb(_bev, onreceive, nullptr, onerror, this);
   other._sockfd = -1;
   other._bev = nullptr;
   return *this;
@@ -216,7 +216,7 @@ void Channel::receive() {
 
 void Channel::close() {
   bufferevent_setwatermark(_bev, EV_WRITE, 1, 16384);
-  bufferevent_setcb(_bev, receive_from_channel, close_channel, error_from_channel, this);
+  bufferevent_setcb(_bev, onreceive, close_channel, onerror, this);
 }
 
 } // websocket

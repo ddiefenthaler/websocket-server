@@ -16,14 +16,14 @@
 
 namespace websocket {
 
-void receive_from_channel(struct bufferevent * bev, void * arg) {
+void onreceive(struct bufferevent * bev, void * arg) {
   
   Channel & chn = *reinterpret_cast<Channel *>(arg);
   
   chn.receive();
 }
 
-void error_from_channel(struct bufferevent * bev, short error, void * arg) {
+void onerror(struct bufferevent * bev, short error, void * arg) {
 
   if(error & BEV_EVENT_EOF) {
     Connection & con = connections.find(bufferevent_getfd(bev))->second;

@@ -15,9 +15,9 @@
 
 namespace websocket {
 
-void receive_from_channel(struct bufferevent * bev, void * arg);
+void onreceive(struct bufferevent * bev, void * arg);
 
-void error_from_channel(struct bufferevent * bev, short error, void * arg);
+void onerror(struct bufferevent * bev, short error, void * arg);
 
 void close_channel(struct bufferevent * bev, void * arg);
 
