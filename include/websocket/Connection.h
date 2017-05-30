@@ -12,7 +12,7 @@ class Connection {
 
 public:
 
-  Connection() = default;
+  Connection() = delete;
   Connection(const Connection &) = delete;
   Connection & operator=(const Connection &) = delete;
   Connection(Connection && other) = default;

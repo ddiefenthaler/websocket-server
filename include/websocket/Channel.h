@@ -14,7 +14,7 @@ class Channel {
 
 public:
   
-  Channel() = default;
+  Channel() = delete;
   Channel(const Channel &) = delete;
   Channel & operator=(const Channel &) = delete;
   Channel(Channel && other);
