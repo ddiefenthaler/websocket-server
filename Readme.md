@@ -23,8 +23,10 @@ handling of multiple connections at once.
 
 ## Building from Source
 
-For now this repository is just an outline without any actual code.
-There is no way of building this project yet.
+This project includes a Makefile which can be used to create an executable.
+It is designed for use under Linux. The project requires pthreads, libevent and boost.
+The dependency to boost is solved within this git repository.
+The other ones have to be provided by the system/user.
 
 ## Cause of the project
 
