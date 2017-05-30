@@ -152,7 +152,7 @@ void Channel::receive() {
 
       evbuffer_drain(input, buffer_pos);
 
-      auto payload = msg.getPayload();
+      auto & payload = msg.getPayload();
       len = evbuffer_get_length(input);
       if(len >= msg.getFullLength()) {
         payload.resize(msg.getFullLength());
