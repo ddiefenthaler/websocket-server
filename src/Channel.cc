@@ -85,10 +85,12 @@ void Channel::send(const Message & msg) {
         len = payload.size();
       } else if(payload.size() <= std::numeric_limits<unsigned short>::max()) {
         len = 126;
-        len16 = boost::endian::native_to_big(payload.size());
+        len16 = payload.size();
+        boost::endian::native_to_big_inplace(len16);
       } else if(payload.size() <= std::numeric_limits<unsigned long long>::max()) {
         len = 127;
-        len64 = boost::endian::native_to_big(payload.size());
+        len64 = payload.size();
+        boost::endian::native_to_big_inplace(len64);
       } else {
         //todo error handling / fragmentation
       }
