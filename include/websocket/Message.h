@@ -49,8 +49,8 @@ public:
   inline void setMasked(bool masked) {
     _masked = masked;
   }
-  inline void setFullLength(unsigned long long length) {
-    _full_length = length;
+  inline void setChunkLength(unsigned long long length) {
+    _chunk_length = length;
   }
   inline void setMask(unsigned char * mask) {
     for(int i=0; i < 4; i++) {
@@ -67,8 +67,8 @@ public:
   inline bool isMasked() const {
     return _masked;
   }
-  inline unsigned long long getFullLength() const {
-    return _full_length;
+  inline unsigned long long getChunkLength() const {
+    return _chunk_length;
   }
   inline const std::array<unsigned char,4> & getMask() const {
     return _mask;
@@ -82,7 +82,7 @@ private:
   bool               _fin = true;
   MessageType        _type;
   bool               _masked = false;
-  unsigned long long _full_length;
+  unsigned long long _chunk_length;
   std::array<unsigned char,4> _mask {};
   std::vector<char>  _payload;
 };

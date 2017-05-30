@@ -136,13 +136,13 @@ void Channel::receive() {
       msg.setMasked(buffer_begin[1] & 0x80);
       int buffer_pos;
       if((buffer_begin[1] & 0x7F) < 126) {
-        msg.setFullLength(buffer_begin[1] & 0x7F);
+        msg.setChunkLength(buffer_begin[1] & 0x7F);
         buffer_pos = 2;
       } else if((buffer_begin[1] & 0x7F) == 126) {
-        msg.setFullLength(*reinterpret_cast<unsigned short *>(buffer_begin+2));
+        msg.setChunkLength(*reinterpret_cast<unsigned short *>(buffer_begin+2));
         buffer_pos = 4;
       } else if((buffer_begin[1] & 0x7F) == 127) {
-        msg.setFullLength(*reinterpret_cast<unsigned long long *>(buffer_begin+2));
+        msg.setChunkLength(*reinterpret_cast<unsigned long long *>(buffer_begin+2));
         buffer_pos = 10;
       }
       if(buffer_begin[1] & 0x80) {
@@ -154,9 +154,9 @@ void Channel::receive() {
 
       auto & payload = msg.getPayload();
       len = evbuffer_get_length(input);
-      if(len >= msg.getFullLength()) {
-        payload.resize(msg.getFullLength());
-        evbuffer_remove(input, payload.data(), msg.getFullLength());
+      if(len >= msg.getChunkLength()) {
+        payload.resize(msg.getChunkLength());
+        evbuffer_remove(input, payload.data(), msg.getChunkLength());
 
         tq.push(0, Task(_sockfd,std::move(msg)));
       } else {
@@ -169,7 +169,7 @@ void Channel::receive() {
       Message & msg = *connection.getIncompleteMsg();
       auto payload = msg.getPayload();
       int oldsize = payload.size();
-      int remaining = msg.getFullLength() - oldsize;
+      int remaining = msg.getChunkLength() - oldsize;
       int len = evbuffer_get_length(input);
       if(len >= remaining) {
         payload.resize(oldsize + remaining);
