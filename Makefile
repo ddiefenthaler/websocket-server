@@ -6,7 +6,7 @@ CXXFLAGS = --std=c++11 -c -g -Wall -I ./include/ $(BOOST_SUBLIBS:%=-I %include/)
 
 LDFLAGS = -lpthread -levent -levent_pthreads
 
-HFILES = main.h Config.h network.h thread.h Connection.h Channel.h Message.h TaskQueue.h internal/lockhelper.h
+HFILES = main.h libevent.h Config.h network.h thread.h Connection.h Channel.h Message.h TaskQueue.h internal/lockhelper.h
 CXXFILES = main.cc network.cc thread.cc Channel.cc Message.cc
 
 .PHONY: all clean rebuild touch_rebuild

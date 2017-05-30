@@ -11,6 +11,7 @@
 #include <utility>
 
 #include <websocket/main.h>
+#include <websocket/libevent.h>
 #include <websocket/network.h>
 #include <websocket/thread.h>
 
@@ -44,7 +45,8 @@ int main(int argc, char * argv[]) {
   
   evthread_use_pthreads();
   
-  websocket::base = event_base_new();
+  websocket::event_base_wrapper base_wrapper;
+  websocket::base = &(base_wrapper.getBase());
   
   evutil_socket_t sockfd = websocket::create_listen_socket();
   
