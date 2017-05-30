@@ -9,7 +9,7 @@ namespace internal {
 
 class bufferevent_lockhelper {
 public:
-  bufferevent_lockhelper() = default;
+  bufferevent_lockhelper() = delete;
   bufferevent_lockhelper(const bufferevent_lockhelper & other) = delete;
   bufferevent_lockhelper & operator=(const bufferevent_lockhelper & other) = delete;
   bufferevent_lockhelper(bufferevent_lockhelper && other) {
@@ -24,18 +24,20 @@ public:
 
   bufferevent_lockhelper(struct bufferevent * bev)
   : _bev(bev)
-  {
+  {}
+
+  void lock() {
     bufferevent_lock(_bev);
   }
 
-  ~bufferevent_lockhelper() {
+  void unlock() {
     if(_bev != nullptr) {
       bufferevent_unlock(_bev);
     }
   }
 
 private:
-  struct bufferevent * _bev = nullptr;
+  struct bufferevent * _bev;
 
 };
 

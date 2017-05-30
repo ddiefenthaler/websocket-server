@@ -3,6 +3,7 @@
 #include <limits>
 #include <array>
 #include <vector>
+#include <mutex>
 
 #include <boost/endian/conversion.hpp>
 
@@ -27,8 +28,9 @@ Channel::Channel(int sockfd)
 Channel::Channel(Channel && other) {
   _sockfd = other._sockfd;
   _bev = other._bev;
-  internal::bufferevent_lockhelper lock(_bev);
   bufferevent_setcb(_bev, receive_from_channel, nullptr, error_from_channel, this);
+  internal::bufferevent_lockhelper lockhelper(_bev);
+  std::lock_guard<internal::bufferevent_lockhelper> lock(lockhelper);
   other._sockfd = -1;
   other._bev = nullptr;
 }
@@ -36,8 +38,9 @@ Channel::Channel(Channel && other) {
 Channel & Channel::operator=(Channel && other) {
   _sockfd = other._sockfd;
   _bev = other._bev;
-  internal::bufferevent_lockhelper lock(_bev);
   bufferevent_setcb(_bev, receive_from_channel, nullptr, error_from_channel, this);
+  internal::bufferevent_lockhelper lockhelper(_bev);
+  std::lock_guard<internal::bufferevent_lockhelper> lock(lockhelper);
   other._sockfd = -1;
   other._bev = nullptr;
   return *this;
@@ -54,7 +57,8 @@ Channel::operator int() {
 }
 
 void Channel::send(const Message & msg) {
-  internal::bufferevent_lockhelper lock(_bev);
+  internal::bufferevent_lockhelper lockhelper(_bev);
+  std::lock_guard<internal::bufferevent_lockhelper> lock(lockhelper);
 
   struct evbuffer * output = bufferevent_get_output(_bev);
 
