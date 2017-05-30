@@ -23,7 +23,7 @@ void Message::demask() {
                    _payload.begin(),
                    [&mask,&i](const unsigned char & p){
                      ++i;
-                     if(i >= 3) {
+                     if(i >= 4) {
                        i=0;
                      }
                      return p^mask[i];
@@ -197,6 +197,11 @@ void OpenHandshakeServerMsg::handle(int connection, int defered) {
   // todo client mode
 }
 
+#include "UserMessages.cc"
+
+/*
+ * todo dynamic user handling
+ * for now compile time
 void ContinuationMsg::handle(int connection, int defered) {
   // todo user handling
 }
@@ -208,6 +213,7 @@ void TextUserMsg::handle(int connection, int defered) {
 void BinaryUserMsg::handle(int connection, int defered) {
   // todo user handling
 }
+*/
 
 void CloseControlMsg::handle(int connection, int defered) {
   Connection & con = connections.find(connection)->second;
