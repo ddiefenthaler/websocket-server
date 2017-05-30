@@ -37,3 +37,9 @@
 [submodule "boost/utility"]
 	path = boost/utility
 	url = git@github.com:boostorg/utility.git
+[submodule "boost/endian"]
+	path = boost/endian
+	url = git@github.com:boostorg/endian.git
+[submodule "boost/predef"]
+	path = boost/predef
+	url = git@github.com:boostorg/predef.git

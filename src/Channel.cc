@@ -4,6 +4,8 @@
 #include <array>
 #include <vector>
 
+#include <boost/endian/conversion.hpp>
+
 #include <websocket/main.h>
 #include <websocket/Channel.h>
 #include <websocket/Connection.h>
@@ -83,10 +85,10 @@ void Channel::send(const Message & msg) {
         len = payload.size();
       } else if(payload.size() <= std::numeric_limits<unsigned short>::max()) {
         len = 126;
-        len16 = payload.size();
+        len16 = boost::endian::native_to_big(payload.size());
       } else if(payload.size() <= std::numeric_limits<unsigned long long>::max()) {
         len = 127;
-        len64 = payload.size();
+        len64 = boost::endian::native_to_big(payload.size());
       } else {
         //todo error handling / fragmentation
       }
@@ -139,10 +141,12 @@ void Channel::receive() {
         msg.setChunkLength(buffer_begin[1] & 0x7F);
         buffer_pos = 2;
       } else if((buffer_begin[1] & 0x7F) == 126) {
-        msg.setChunkLength(*reinterpret_cast<unsigned short *>(buffer_begin+2));
+        auto chunkLength = boost::endian::big_to_native(*reinterpret_cast<unsigned short *>(buffer_begin+2));
+        msg.setChunkLength(chunkLength);
         buffer_pos = 4;
       } else if((buffer_begin[1] & 0x7F) == 127) {
-        msg.setChunkLength(*reinterpret_cast<unsigned long long *>(buffer_begin+2));
+         auto chunkLength = boost::endian::big_to_native(*reinterpret_cast<unsigned long long *>(buffer_begin+2));
+        msg.setChunkLength(chunkLength);
         buffer_pos = 10;
       }
       if(buffer_begin[1] & 0x80) {
