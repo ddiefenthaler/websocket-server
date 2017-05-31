@@ -83,15 +83,15 @@ void Channel::send(const Message & msg) {
         opcode = opcode | 0x80;
       }
       unsigned char len;
-      unsigned short len16 = 0;
-      unsigned long long len64 = 0;
+      uint16_t len16 = 0;
+      uint64_t len64 = 0;
       if(payload.size() < 126) {
         len = payload.size();
-      } else if(payload.size() <= std::numeric_limits<unsigned short>::max()) {
+      } else if(payload.size() <= std::numeric_limits<uint16_t>::max()) {
         len = 126;
         len16 = payload.size();
         boost::endian::native_to_big_inplace(len16);
-      } else if(payload.size() <= std::numeric_limits<unsigned long long>::max()) {
+      } else if(payload.size() <= std::numeric_limits<uint64_t>::max()) {
         len = 127;
         len64 = payload.size();
         boost::endian::native_to_big_inplace(len64);
@@ -147,11 +147,11 @@ void Channel::receive() {
         msg.setChunkLength(buffer_begin[1] & 0x7F);
         buffer_pos = 2;
       } else if((buffer_begin[1] & 0x7F) == 126) {
-        auto chunkLength = boost::endian::big_to_native(*reinterpret_cast<unsigned short *>(buffer_begin+2));
+        auto chunkLength = boost::endian::big_to_native(*reinterpret_cast<uint16_t *>(buffer_begin+2));
         msg.setChunkLength(chunkLength);
         buffer_pos = 4;
       } else if((buffer_begin[1] & 0x7F) == 127) {
-         auto chunkLength = boost::endian::big_to_native(*reinterpret_cast<unsigned long long *>(buffer_begin+2));
+         auto chunkLength = boost::endian::big_to_native(*reinterpret_cast<uint64_t *>(buffer_begin+2));
         msg.setChunkLength(chunkLength);
         buffer_pos = 10;
       }
