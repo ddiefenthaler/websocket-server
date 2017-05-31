@@ -1,9 +1,10 @@
 #include <vector>
 #include <array>
+#include <unordered_map>
+#include <string>
+#include <functional>
 #include <algorithm>
 #include <regex>
-#include <string>
-#include <iterator>
 
 #include <boost/uuid/sha1.hpp>
 #include <boost/archive/iterators/base64_from_binary.hpp>
@@ -32,46 +33,17 @@ void Message::demask() {
   }
 }
 
-void Message::handle(int connection, int defered /* = 0 */) {
-  if(defered != 0) {
-    // invalid recursion
-    return;
-  }
-
+void Message::handle(int connection) {
   demask();
 
-  if(_type == OpeningHandshake_Client) {
-    auto & typedMsg = *reinterpret_cast<CppMessageType<OpeningHandshake_Client>::type *>(this);
-    typedMsg.handle(connection,1);
-  } else if(_type == OpeningHandshake_Server) {
-    auto & typedMsg = *reinterpret_cast<CppMessageType<OpeningHandshake_Server>::type *>(this);
-    typedMsg.handle(connection,1);
-  } else if(_type == Continuation) {
-    auto & typedMsg = *reinterpret_cast<CppMessageType<Continuation>::type *>(this);
-    typedMsg.handle(connection,1);
-  } else if(_type == UserMessage_Text) {
-    auto & typedMsg = *reinterpret_cast<CppMessageType<UserMessage_Text>::type *>(this);
-    typedMsg.handle(connection,1);
-  } else if(_type == UserMessage_Binary) {
-    auto & typedMsg = *reinterpret_cast<CppMessageType<UserMessage_Binary>::type *>(this);
-    typedMsg.handle(connection,1);
-  } else if(_type == ControlMessage_Close) {
-    auto & typedMsg = *reinterpret_cast<CppMessageType<ControlMessage_Close>::type *>(this);
-    typedMsg.handle(connection,1);
-  } else if(_type == ControlMessage_Ping) {
-    auto & typedMsg = *reinterpret_cast<CppMessageType<ControlMessage_Ping>::type *>(this);
-    typedMsg.handle(connection,1);
-  } else if(_type == ControlMessage_Pong) {
-    auto & typedMsg = *reinterpret_cast<CppMessageType<ControlMessage_Pong>::type *>(this);
-    typedMsg.handle(connection,1);
-  } else {
-    // todo error handling
-  }
+  auto & handler = Message::handlers.at(_type);
+  // todo error handling
+  handler(connection, *this);
 }
 
-void OpenHandshakeClientMsg::handle(int connection, int defered) {
+void handle_OpeningHandshake_Client(int connection, Message & msg) {
   Connection & con = connections.find(connection)->second;
-  auto & msg_payload = getPayload();
+  auto & msg_payload = msg.getPayload();
   // regex parsing
   // from RFC 2616
   std::string LWS     = "(?:(?:\\r\\n)?[ \\t]+)";
@@ -193,7 +165,7 @@ void OpenHandshakeClientMsg::handle(int connection, int defered) {
   con.close();
 }
 
-void OpenHandshakeServerMsg::handle(int connection, int defered) {
+void handle_OpeningHandshake_Server(int connection, Message & msg) {
   // todo client mode
 }
 
@@ -202,20 +174,20 @@ void OpenHandshakeServerMsg::handle(int connection, int defered) {
 /*
  * todo dynamic user handling
  * for now compile time
-void ContinuationMsg::handle(int connection, int defered) {
+void handle_Continuation(int connection, Message & msg) {
   // todo user handling
 }
 
-void TextUserMsg::handle(int connection, int defered) {
+void handle_UserMessage_Text(int connection, Message & msg) {
   // todo user handling
 }
 
-void BinaryUserMsg::handle(int connection, int defered) {
+void handle_UserMessage_Binary(int connection, Message & msg) {
   // todo user handling
 }
 */
 
-void CloseControlMsg::handle(int connection, int defered) {
+void handle_ControlMessage_Close(int connection, Message & msg) {
   Connection & con = connections.find(connection)->second;
   if(!con.is_closed()) {
     Message close_msg(ControlMessage_Close);
@@ -229,17 +201,35 @@ void CloseControlMsg::handle(int connection, int defered) {
   // (client mode only, RFC: The server MUST close the ... immediately)
 }
 
-void PingControlMsg::handle(int connection, int defered) {
+void handle_ControlMessage_Ping(int connection, Message & msg) {
   Connection & con = connections.find(connection)->second;
-  Message & pingpong_msg = *reinterpret_cast<Message *>(this);
-  pingpong_msg.setType(ControlMessage_Pong);
+  msg.setType(ControlMessage_Pong);
   // todo masking for client mode
-  con.send(pingpong_msg);
+  con.send(msg);
 }
 
-void PongControlMsg::handle(int connection, int defered) {
+void handle_ControlMessage_Pong(int connection, Message & msg) {
   // todo check for previous ping / clear timeouts
 }
+
+std::unordered_map<MessageType,std::function<void(int,Message &)>>
+create_handlers() {
+  std::unordered_map<MessageType,std::function<void(int,Message &)>> res;
+
+  res[OpeningHandshake_Client] = handle_OpeningHandshake_Client;
+  res[OpeningHandshake_Server] = handle_OpeningHandshake_Server;
+  res[Continuation] = handle_Continuation;
+  res[UserMessage_Text] = handle_UserMessage_Text;
+  res[UserMessage_Binary] = handle_UserMessage_Binary;
+  res[ControlMessage_Close] = handle_ControlMessage_Close;
+  res[ControlMessage_Ping] = handle_ControlMessage_Ping;
+  res[ControlMessage_Pong] = handle_ControlMessage_Pong;
+
+  return res;
+}
+
+std::unordered_map<MessageType,std::function<void(int,Message &)>>
+Message::handlers = create_handlers();
 
 }
 

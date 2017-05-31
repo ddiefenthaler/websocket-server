@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <array>
+#include <unordered_map>
+#include <functional>
 
 namespace websocket {
 
@@ -18,6 +20,9 @@ enum MessageType : int {
 };
 
 class Message {
+
+public:
+  static std::unordered_map<MessageType,std::function<void(int,Message &)>> handlers;
 
 public:
   typedef Message self_t;
@@ -75,7 +80,7 @@ public:
   }
 
   void demask();
-  void handle(int connection, int defered = 0);
+  void handle(int connection);
 
 private:
 
@@ -87,59 +92,6 @@ private:
   std::vector<char>  _payload;
 };
 
-class OpenHandshakeClientMsg : public Message {public: void handle(int connection, int defered = 1);};
-class OpenHandshakeServerMsg : public Message {public: void handle(int connection, int defered = 1);};
-class ContinuationMsg : public Message {public: void handle(int connection, int defered = 1);};
-class TextUserMsg : public Message {public: void handle(int connection, int defered = 1);};
-class BinaryUserMsg : public Message {public: void handle(int connection, int defered = 1);};
-class CloseControlMsg : public Message {public: void handle(int connection, int defered = 1);};
-class PingControlMsg : public Message {public: void handle(int connection, int defered = 1);};
-class PongControlMsg : public Message {public: void handle(int connection, int defered = 1);};
-
-template <MessageType t>
-struct CppMessageType {
-  using type = Message;
-};
-
-template <>
-struct CppMessageType<OpeningHandshake_Client> {
-  using type = OpenHandshakeClientMsg;
-};
-
-template <>
-struct CppMessageType<OpeningHandshake_Server> {
-  using type = OpenHandshakeServerMsg;
-};
-
-template <>
-struct CppMessageType<Continuation> {
-  using type = ContinuationMsg;
-};
-
-template <>
-struct CppMessageType<UserMessage_Text> {
-  using type = TextUserMsg;
-};
-
-template <>
-struct CppMessageType<UserMessage_Binary> {
-  using type = BinaryUserMsg;
-};
-
-template <>
-struct CppMessageType<ControlMessage_Close> {
-  using type = CloseControlMsg;
-};
-
-template <>
-struct CppMessageType<ControlMessage_Ping> {
-  using type = PingControlMsg;
-};
-
-template <>
-struct CppMessageType<ControlMessage_Pong> {
-  using type = PongControlMsg;
-};
 
 }
 
