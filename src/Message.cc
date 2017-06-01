@@ -144,7 +144,7 @@ void handle_OpeningHandshake_Client(int connection, Message & msg) {
     or_payload_str.append("\r\n\r\n");
     or_payload = std::vector<char>(or_payload_str.begin(),or_payload_str.end());
 
-    con.send(open_response);
+    con.establish(open_response);
 
     return;
   }

@@ -22,6 +22,7 @@ public:
   : _channel(std::move(channel))
   {}
 
+  // todo split into seperate types for different states
   inline bool is_established() const {
     return _established;
   }
@@ -32,11 +33,12 @@ public:
     return _closed;
   }
 
-  inline void set_established(bool ested) {
-    _established = ested;
+  inline void establish(Message & header) {
+    send(header);
+    _established = true;
   }
-  inline void set_establishing(bool esting) {
-    _establishing = esting;
+  inline void header_received() {
+    _establishing = true;
   }
 
   inline Message * getIncompleteMsg() {

@@ -193,6 +193,7 @@ void Channel::receive() {
       }
     }
   } else { // openening connection
+    // todo abort on invalid package
     struct evbuffer_ptr p;
     evbuffer_ptr_set(input, &p, 0, EVBUFFER_PTR_SET);
     p = evbuffer_search(input, "\r\n\r\n", 4, &p);
@@ -208,7 +209,7 @@ void Channel::receive() {
 
       tq.push(0,Task(_sockfd,std::move(msg)));
 
-      connection.set_establishing(true);
+      connection.header_received();
     }
   }
 
