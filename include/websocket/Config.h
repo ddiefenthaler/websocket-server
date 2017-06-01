@@ -6,18 +6,20 @@ namespace websocket {
 class Config {
 
   public:
-    inline short getPort() const{
+    inline short port() const{
       return _port;
     }
-    inline void  setPort(short port) {
+    inline short port(short port) {
       _port = port;
+      return _port;
     }
     
-    inline unsigned short getNumberThreads() const {
+    inline unsigned short numberThreads() const {
       return _number_threads;
     }
-    inline void  setNumberThreads(unsigned short number_threads) {
+    inline unsigned short numberThreads(unsigned short number_threads) {
       _number_threads = number_threads;
+      return _number_threads;
     }
     
   private:

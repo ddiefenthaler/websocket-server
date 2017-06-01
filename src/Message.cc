@@ -43,7 +43,7 @@ void Message::handle(int connection) {
 
 void handle_OpeningHandshake_Client(int connection, Message & msg) {
   Connection & con = connections.find(connection)->second;
-  auto & msg_payload = msg.getPayload();
+  auto & msg_payload = msg.payload();
   // regex parsing
   // from RFC 2616
   std::string LWS     = "(?:(?:\\r\\n)?[ \\t]+)";
@@ -132,7 +132,7 @@ void handle_OpeningHandshake_Client(int connection, Message & msg) {
   if(successful && got_host && got_upgrade && got_connection &&
       got_sec_websocket_key && got_sec_websocket_version) {
     Message open_response(OpeningHandshake_Server);
-    auto & or_payload = open_response.getPayload();
+    auto & or_payload = open_response.payload();
     std::string or_payload_str(
       "HTTP/1.1 101 Switching Protocols\r\n"
       "Server: wip-websocket-server\r\n"
@@ -150,7 +150,7 @@ void handle_OpeningHandshake_Client(int connection, Message & msg) {
   }
 
   Message bad_request(OpeningHandshake_Server);
-  auto & br_payload = bad_request.getPayload();
+  auto & br_payload = bad_request.payload();
   // todo outsource in seperate Header
   std::string br_payload_str(
     "HTTP/1.1 400 Bad Request\r\n"
@@ -203,7 +203,7 @@ void handle_ControlMessage_Close(int connection, Message & msg) {
 
 void handle_ControlMessage_Ping(int connection, Message & msg) {
   Connection & con = connections.find(connection)->second;
-  msg.setType(ControlMessage_Pong);
+  msg.type(ControlMessage_Pong);
   // todo masking for client mode
   con.send(msg);
 }

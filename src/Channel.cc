@@ -62,9 +62,9 @@ void Channel::send(const Message & msg) {
 
   struct evbuffer * output = bufferevent_get_output(_bev);
 
-  auto & payload = msg.getPayload();
+  auto & payload = msg.payload();
 
-  switch(msg.getType()) {
+  switch(msg.type()) {
     case OpeningHandshake_Client:
     case OpeningHandshake_Server:
     {
@@ -78,7 +78,7 @@ void Channel::send(const Message & msg) {
     case ControlMessage_Ping:
     case ControlMessage_Pong:
     {
-      unsigned char opcode = static_cast<unsigned char>(msg.getType());
+      unsigned char opcode = static_cast<unsigned char>(msg.type());
       if(msg.isFin()) {
         opcode = opcode | 0x80;
       }
@@ -110,7 +110,7 @@ void Channel::send(const Message & msg) {
         evbuffer_add(output, &len64, 8);
       }
       if(msg.isMasked()) {
-        evbuffer_add(output, msg.getMask().data(), 4);
+        evbuffer_add(output, msg.mask().data(), 4);
       }
       evbuffer_add(output, payload.data(), payload.size());
       break;
@@ -139,34 +139,34 @@ void Channel::receive() {
 
       // todo better length check
       Message msg;
-      msg.setFin(buffer_begin[0] & 0x80);
-      msg.setType(static_cast<MessageType>(buffer_begin[0] & 0x0F));
-      msg.setMasked(buffer_begin[1] & 0x80);
+      msg.fin(buffer_begin[0] & 0x80);
+      msg.type(static_cast<MessageType>(buffer_begin[0] & 0x0F));
+      msg.masked(buffer_begin[1] & 0x80);
       int buffer_pos;
       if((buffer_begin[1] & 0x7F) < 126) {
-        msg.setChunkLength(buffer_begin[1] & 0x7F);
+        msg.chunkLength(buffer_begin[1] & 0x7F);
         buffer_pos = 2;
       } else if((buffer_begin[1] & 0x7F) == 126) {
         auto chunkLength = boost::endian::big_to_native(*reinterpret_cast<uint16_t *>(buffer_begin+2));
-        msg.setChunkLength(chunkLength);
+        msg.chunkLength(chunkLength);
         buffer_pos = 4;
       } else if((buffer_begin[1] & 0x7F) == 127) {
          auto chunkLength = boost::endian::big_to_native(*reinterpret_cast<uint64_t *>(buffer_begin+2));
-        msg.setChunkLength(chunkLength);
+        msg.chunkLength(chunkLength);
         buffer_pos = 10;
       }
       if(buffer_begin[1] & 0x80) {
-        msg.setMask(buffer_begin+buffer_pos);
+        msg.mask(buffer_begin+buffer_pos);
         buffer_pos += 4;
       }
 
       evbuffer_drain(input, buffer_pos);
 
-      auto & payload = msg.getPayload();
+      auto & payload = msg.payload();
       len = evbuffer_get_length(input);
-      if(len >= msg.getChunkLength()) {
-        payload.resize(msg.getChunkLength());
-        evbuffer_remove(input, payload.data(), msg.getChunkLength());
+      if(len >= msg.chunkLength()) {
+        payload.resize(msg.chunkLength());
+        evbuffer_remove(input, payload.data(), msg.chunkLength());
 
         tq.push(0, Task(_sockfd,std::move(msg)));
       } else {
@@ -177,9 +177,9 @@ void Channel::receive() {
       }
     } else { // Complete last msg
       Message & msg = _incompletePart_buffer;
-      auto payload = msg.getPayload();
+      auto payload = msg.payload();
       int oldsize = payload.size();
-      int remaining = msg.getChunkLength() - oldsize;
+      int remaining = msg.chunkLength() - oldsize;
       int len = evbuffer_get_length(input);
       if(len >= remaining) {
         payload.resize(oldsize + remaining);
@@ -203,7 +203,7 @@ void Channel::receive() {
     } else {
       Message msg(OpeningHandshake_Client,p.pos+4);
 
-      evbuffer_remove(input, msg.getPayload().data(),p.pos+4);
+      evbuffer_remove(input, msg.payload().data(),p.pos+4);
 
       bufferevent_setwatermark(_bev, EV_READ, 0, 16384);
 

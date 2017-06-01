@@ -54,7 +54,7 @@ evutil_socket_t create_listen_socket() {
 
   sin.sin_family = AF_INET;
   sin.sin_addr.s_addr = 0; // 0.0.0.0
-  sin.sin_port = htons(config.getPort());
+  sin.sin_port = htons(config.port());
 
   evutil_socket_t sockfd = socket(AF_INET, SOCK_STREAM, 0);
   evutil_make_socket_nonblocking(sockfd);

@@ -39,14 +39,14 @@ int main(int argc, char * argv[]) {
   //std::map<int, websocket::Connection> connections;
   
   std::vector<std::thread> worker_threads;
-  for(int i=0; i < websocket::config.getNumberThreads(); i++) {
+  for(int i=0; i < websocket::config.numberThreads(); i++) {
     worker_threads.push_back(std::thread(websocket::worker_thread));
   }
   
   evthread_use_pthreads();
   
   websocket::event_base_wrapper base_wrapper;
-  websocket::base = &(base_wrapper.getBase());
+  websocket::base = &(base_wrapper.base());
   
   evutil_socket_t sockfd = websocket::create_listen_socket();
   

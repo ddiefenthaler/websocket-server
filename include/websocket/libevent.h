@@ -16,7 +16,7 @@ public:
     event_base_free(_base);
   }
 
-  struct event_base & getBase() {
+  struct event_base & base() {
     return *_base;
   }
 

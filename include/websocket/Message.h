@@ -37,33 +37,38 @@ public:
   : _type(type), _payload(size)
   {}
 
-  inline const std::vector<char> & getPayload() const {
+  inline const std::vector<char> & payload() const {
     return _payload;
   }
 
-  inline std::vector<char> & getPayload() {
+  inline std::vector<char> & payload() {
     return _payload;
   }
 
-  inline void setType(MessageType type) {
+  inline MessageType type(MessageType type) {
     _type = type;
+    return _type;
   }
-  inline void setFin(bool fin) {
+  inline bool fin(bool fin) {
     _fin = fin;
+    return _fin;
   }
-  inline void setMasked(bool masked) {
+  inline bool masked(bool masked) {
     _masked = masked;
+    return _masked;
   }
-  inline void setChunkLength(unsigned long long length) {
+  inline unsigned long long chunkLength(unsigned long long length) {
     _chunk_length = length;
+    return _chunk_length;
   }
-  inline void setMask(unsigned char * mask) {
+  inline const std::array<unsigned char,4> & mask(unsigned char * mask) {
     for(int i=0; i < 4; i++) {
       _mask[i] = mask[i];
     }
+    return _mask;
   }
 
-  inline MessageType getType() const {
+  inline MessageType type() const {
     return _type;
   }
   inline bool isFin() const {
@@ -72,10 +77,10 @@ public:
   inline bool isMasked() const {
     return _masked;
   }
-  inline unsigned long long getChunkLength() const {
+  inline unsigned long long chunkLength() const {
     return _chunk_length;
   }
-  inline const std::array<unsigned char,4> & getMask() const {
+  inline const std::array<unsigned char,4> & mask() const {
     return _mask;
   }
 
