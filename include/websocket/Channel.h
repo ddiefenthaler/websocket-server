@@ -33,6 +33,8 @@ public:
 private:
     int                  _sockfd = -1;
     struct bufferevent * _bev    = nullptr;
+    bool                 _incompleteIncoming;
+    Message              _incompletePart_buffer;
 };
 
 } // websocket

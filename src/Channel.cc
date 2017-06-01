@@ -128,7 +128,7 @@ void Channel::receive() {
   // todo states from rfc: connecting, ...
   struct evbuffer * input = bufferevent_get_input(_bev);
   if(connection.is_established() || connection.establishing()) {
-    if(connection.getIncompleteMsg() == nullptr) {
+    if(!_incompleteIncoming) {
       unsigned long long len = evbuffer_get_length(input);
       unsigned char * buffer_begin;
       if(len < 14) {
@@ -173,10 +173,10 @@ void Channel::receive() {
         payload.resize(len);
         evbuffer_remove(input, payload.data(), len);
 
-        connection.setIncompleteMsg(std::move(msg));
+        _incompletePart_buffer = std::move(msg);
       }
     } else { // Complete last msg
-      Message & msg = *connection.getIncompleteMsg();
+      Message & msg = _incompletePart_buffer;
       auto payload = msg.getPayload();
       int oldsize = payload.size();
       int remaining = msg.getChunkLength() - oldsize;
@@ -186,7 +186,7 @@ void Channel::receive() {
         evbuffer_remove(input, payload.data() + oldsize, remaining);
 
         tq.push(0, Task(_sockfd,std::move(msg)));
-        connection.unsetIncompleteMsg();
+        _incompleteIncoming = false;
       } else {
         payload.resize(oldsize + len);
         evbuffer_remove(input, payload.data() + oldsize, len);

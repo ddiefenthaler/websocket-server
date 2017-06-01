@@ -41,21 +41,6 @@ public:
     _establishing = true;
   }
 
-  inline Message * getIncompleteMsg() {
-    // pointer as Maybe-type
-    if(_incompleteIncoming) {
-      return &_incompleteMsg;
-    }
-    return nullptr;
-  }
-  inline void setIncompleteMsg(Message && msg) {
-    _incompleteIncoming = true;
-    _incompleteMsg = msg;
-  }
-  inline void unsetIncompleteMsg() {
-    _incompleteIncoming = false;
-  }
-
   inline void send(const Message & msg) {
     _channel.send(msg);
   }
@@ -74,8 +59,6 @@ private:
   bool _establishing = false;
   bool _closed       = false;
   Channel _channel;
-  bool _incompleteIncoming = false;
-  Message _incompleteMsg;
 };
 
 // ConIt is an iterator with value_type std::pair<int,Connection>
